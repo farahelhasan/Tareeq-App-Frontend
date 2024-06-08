@@ -1,0 +1,513 @@
+Row(
+                        children:[
+                          Padding(padding: EdgeInsets.only(top: 50 )),
+                          Text("   Find the best checkpoint!" ,
+                          style: TextStyle(color: Colors.black , fontSize: 24.0, fontWeight: FontWeight.bold),
+                         )
+                        ],
+                        ),
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                Text("    CHICKPOINTS!" ,
+                                style:
+                                 TextStyle(color: Colors.green ,
+                                 fontSize: 18.0), ),
+                            ]
+                            )
+                             ]
+                        ,),
+
+                    Container(
+                      height: 250,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                width: 150,
+                                padding: EdgeInsets.only(top: 15 , left: 15 , right: 15),
+                                child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: 
+                                            Image.asset("images/merabaa.jpg" , 
+                                            fit: BoxFit.fill , ),  
+                                             
+                                      ),
+                              ),
+                              Text("Merabaa" ,
+                              style: TextStyle(color: Colors.green , 
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,))
+                            ],
+                          ),
+                           Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                width: 150,
+                                padding: EdgeInsets.only(top: 15 , left: 15 , right: 15),
+                                child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: 
+                                            Image.asset("images/hwara.jpg" , 
+                                            fit: BoxFit.fill , ),  
+                                             
+                                      ),
+                              ),
+                              Text("Hwara" ,
+                              style: TextStyle(color: Colors.green , 
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                           Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                width: 150,
+                                padding: EdgeInsets.only(top: 15 , left: 15 , right: 15),
+                                child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: 
+                                            Image.asset("images/zatara.jpg" , 
+                                            fit: BoxFit.fill , ),  
+                                             
+                                      ),
+                              ),
+                              Text("Zatara" ,
+                              style: TextStyle(color: Colors.green , 
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold))
+                            ],
+                          ), 
+                           Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                width: 150,
+                                padding: EdgeInsets.only(top: 15 , left: 15 , right: 15),
+                                child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: 
+                                            Image.asset("images/merabaa.jpg" , 
+                                            fit: BoxFit.fill),
+                                              
+                                             
+                                      ),
+                              ),
+                              Text("Merabaa" ,
+                              style: TextStyle(color: Colors.green , 
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    Row(
+                      children: [
+                        Padding(padding: EdgeInsets.only(left: 17)),
+                        Text("Populer CheckPoints!" ,
+                              style: TextStyle(color: Colors.green , 
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold))],
+                    ), 
+                    Container(
+                      height: 100000,
+                      child: ListView(
+                        scrollDirection: Axis.vertical,
+                        
+                        children: [
+                            Container(
+                              color: Color.fromARGB(136, 207, 244, 208),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: EdgeInsets.only(top: 10 , left: 10 , bottom: 15 ,),
+                                    child:  ClipRRect(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , bottomLeft: Radius.circular(15)),
+                                                  child: 
+                                                  Image.asset("images/merabaa.jpg" , 
+                                                  fit: BoxFit.fill),
+                                                    
+                                                   
+                                            ),
+                                  ),
+                                  Container(
+                                    height: 75,
+                                     //color: const Color.fromARGB(255, 173, 226, 175),
+                                     padding: EdgeInsets.only(left: 5),
+                                    child: Column(
+                                      
+                                      children: [
+                                        Container(
+                                         
+                                          child:
+                                        Text("merabaa checpoint             ",style: TextStyle(color: Colors.green , 
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                         Container(
+                                          child:
+                                        Text("From the north towards Nablus",style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                        Container(
+                                          child:
+                                        Text("permanent                                   ",
+                                        style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50, bottom: 15),
+                                    child: Column(
+                                      children: [
+                                        Text("4.0", style:TextStyle(fontWeight: FontWeight.bold),),
+                                        Icon(Icons.star)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                            )
+                            ,
+                             Container(
+                              color: Color.fromARGB(136, 207, 244, 208),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: EdgeInsets.only(top: 10 , left: 10 , bottom: 15 ,),
+                                    child:  ClipRRect(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , bottomLeft: Radius.circular(15)),
+                                                  child: 
+                                                  Image.asset("images/merabaa.jpg" , 
+                                                  fit: BoxFit.fill),
+                                                    
+                                                   
+                                            ),
+                                  ),
+                                  Container(
+                                    height: 75,
+                                     //color: const Color.fromARGB(255, 173, 226, 175),
+                                     padding: EdgeInsets.only(left: 5),
+                                    child: Column(
+                                      
+                                      children: [
+                                        Container(
+                                         
+                                          child:
+                                        Text("merabaa checpoint             ",style: TextStyle(color: Colors.green , 
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                         Container(
+                                          child:
+                                        Text("From the north towards Nablus",style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                        Container(
+                                          child:
+                                        Text("permanent                                   ",
+                                        style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50, bottom: 15),
+                                    child: Column(
+                                      children: [
+                                        Text("4.0", style:TextStyle(fontWeight: FontWeight.bold),),
+                                        Icon(Icons.star)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                            )  ,
+                             Container(
+                              color: Color.fromARGB(136, 207, 244, 208),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: EdgeInsets.only(top: 10 , left: 10 , bottom: 15 ,),
+                                    child:  ClipRRect(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , bottomLeft: Radius.circular(15)),
+                                                  child: 
+                                                  Image.asset("images/merabaa.jpg" , 
+                                                  fit: BoxFit.fill),
+                                                    
+                                                   
+                                            ),
+                                  ),
+                                  Container(
+                                    height: 75,
+                                     //color: const Color.fromARGB(255, 173, 226, 175),
+                                     padding: EdgeInsets.only(left: 5),
+                                    child: Column(
+                                      
+                                      children: [
+                                        Container(
+                                         
+                                          child:
+                                        Text("merabaa checpoint             ",style: TextStyle(color: Colors.green , 
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                         Container(
+                                          child:
+                                        Text("From the north towards Nablus",style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                        Container(
+                                          child:
+                                        Text("permanent                                   ",
+                                        style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50, bottom: 15),
+                                    child: Column(
+                                      children: [
+                                        Text("4.0", style:TextStyle(fontWeight: FontWeight.bold),),
+                                        Icon(Icons.star)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                            )  ,
+                             Container(
+                              color: Color.fromARGB(136, 207, 244, 208),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: EdgeInsets.only(top: 10 , left: 10 , bottom: 15 ,),
+                                    child:  ClipRRect(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , bottomLeft: Radius.circular(15)),
+                                                  child: 
+                                                  Image.asset("images/merabaa.jpg" , 
+                                                  fit: BoxFit.fill),
+                                                    
+                                                   
+                                            ),
+                                  ),
+                                  Container(
+                                    height: 75,
+                                     //color: const Color.fromARGB(255, 173, 226, 175),
+                                     padding: EdgeInsets.only(left: 5),
+                                    child: Column(
+                                      
+                                      children: [
+                                        Container(
+                                         
+                                          child:
+                                        Text("merabaa checpoint             ",style: TextStyle(color: Colors.green , 
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                         Container(
+                                          child:
+                                        Text("From the north towards Nablus",style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                        Container(
+                                          child:
+                                        Text("permanent                                   ",
+                                        style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50, bottom: 15),
+                                    child: Column(
+                                      children: [
+                                        Text("4.0", style:TextStyle(fontWeight: FontWeight.bold),),
+                                        Icon(Icons.star)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                            )  ,
+                             Container(
+                              color: Color.fromARGB(136, 207, 244, 208),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: EdgeInsets.only(top: 10 , left: 10 , bottom: 15 ,),
+                                    child:  ClipRRect(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , bottomLeft: Radius.circular(15)),
+                                                  child: 
+                                                  Image.asset("images/merabaa.jpg" , 
+                                                  fit: BoxFit.fill),
+                                                    
+                                                   
+                                            ),
+                                  ),
+                                  Container(
+                                    height: 75,
+                                     //color: const Color.fromARGB(255, 173, 226, 175),
+                                     padding: EdgeInsets.only(left: 5),
+                                    child: Column(
+                                      
+                                      children: [
+                                        Container(
+                                         
+                                          child:
+                                        Text("merabaa checpoint             ",style: TextStyle(color: Colors.green , 
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                         Container(
+                                          child:
+                                        Text("From the north towards Nablus",style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                        Container(
+                                          child:
+                                        Text("permanent                                   ",
+                                        style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50, bottom: 15),
+                                    child: Column(
+                                      children: [
+                                        Text("4.0", style:TextStyle(fontWeight: FontWeight.bold),),
+                                        Icon(Icons.star)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                             Container(
+                              color: Color.fromARGB(136, 207, 244, 208),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    padding: EdgeInsets.only(top: 10 , left: 10 , bottom: 15 ,),
+                                    child:  ClipRRect(
+                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , bottomLeft: Radius.circular(15)),
+                                                  child: 
+                                                  Image.asset("images/merabaa.jpg" , 
+                                                  fit: BoxFit.fill),
+                                                    
+                                                   
+                                            ),
+                                  ),
+                                  Container(
+                                    height: 75,
+                                     //color: const Color.fromARGB(255, 173, 226, 175),
+                                     padding: EdgeInsets.only(left: 5),
+                                    child: Column(
+                                      
+                                      children: [
+                                        Container(
+                                         
+                                          child:
+                                        Text("merabaa checpoint             ",style: TextStyle(color: Colors.green , 
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                         Container(
+                                          child:
+                                        Text("From the north towards Nablus",style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,),
+                                        ),
+                                        Container(
+                                          child:
+                                        Text("permanent                                   ",
+                                        style: TextStyle( 
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50, bottom: 15),
+                                    child: Column(
+                                      children: [
+                                        Text("4.0", style:TextStyle(fontWeight: FontWeight.bold),),
+                                        Icon(Icons.star)
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                        ],
+                      ),
+                    ) 
