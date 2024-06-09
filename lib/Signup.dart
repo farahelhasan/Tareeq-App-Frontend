@@ -518,7 +518,7 @@ if (namestate.currentState!.validate() &&
   );
   },
   child: Text(
-  "انشاء حساب",
+  "تسجيل الدخول",
   style: TextStyle(
   color: Colors.indigo[900],
   fontSize: 16,

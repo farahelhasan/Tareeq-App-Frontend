@@ -8,10 +8,10 @@ import 'package:hello_world/GetChekpoints.dart';
 
 
 void main() {
-  runApp(MyApp());
+  runApp(Favorite());
 }
 
-class MyApp extends StatelessWidget {
+class Favorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

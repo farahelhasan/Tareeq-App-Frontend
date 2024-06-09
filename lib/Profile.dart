@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ApiService.dart';
+import 'package:hello_world/MapPageUser.dart';
 import 'package:hello_world/Settings.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'package:hello_world/ApiService.dart';
@@ -94,7 +95,7 @@ class _ProfileState extends State<Profile> {
   onPressed: () {
   Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) => settings()),
+  MaterialPageRoute(builder: (context) => MapApp()),
   );
   },
   icon: Icon(

@@ -64,7 +64,7 @@ class CheckpointDetailsBody extends StatelessWidget {
               tabs: [
                 Tab(text: 'معلومات الحاجز'),
                 Tab(text: 'السؤال عن الحاجز'),
-                Tab(text: 'التعليقات'),
+                Tab(text: 'اخر التحديثات'),
               ],
               labelColor: Colors.indigo[900],
               indicatorColor: Colors.indigo[900],
@@ -72,7 +72,7 @@ class CheckpointDetailsBody extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: Color.fromARGB(248, 252, 252, 250),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
@@ -129,7 +129,7 @@ class CheckpointDetailsBody extends StatelessWidget {
 
   Widget _buildAttributeRow(String value, String label) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(

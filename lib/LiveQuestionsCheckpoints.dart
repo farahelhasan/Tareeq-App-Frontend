@@ -183,7 +183,7 @@ class _LiveQuestionsCheckpointsState extends State<LiveQuestionsCheckpoints> {
                       borderSide: BorderSide(color: Color.fromARGB(255, 40, 43, 152)),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    hintText: 'اسأل عن الطريق التي تريد',
+                    hintText: 'اسأل عن حالة الحاجز',
                     hintStyle: TextStyle(fontSize: 16, color: Colors.indigo[900]),
                     contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                   ),

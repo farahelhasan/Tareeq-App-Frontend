@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hello_world/AboutTareeq.dart';
 import 'package:hello_world/ApiService.dart';
+import 'package:hello_world/FavoriteList.dart';
 import 'package:hello_world/Profile.dart';
 import 'package:hello_world/LogIn.dart';
 import 'package:hello_world/PathQuestions.dart';
@@ -289,7 +290,7 @@ import 'package:geolocator/geolocator.dart';
   title: Text("الحواجز المفضلة", style: TextStyle(color: Colors.white)),
   leading: Icon(Icons.favorite, color: Colors.white),
   onTap: () {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+  Navigator.push(context, MaterialPageRoute(builder: (context) => Favorite()));
   },
   ),
   ListTile(
@@ -635,9 +636,9 @@ class _RemoveBarrierDialogState extends State<RemoveBarrierDialog> {
                 onPressed: () {
                   if (selectedBarrierName.isNotEmpty) {
                     Map<String, dynamic>? selectedCheckpoint = checkpoints.firstWhere((checkpoint) => checkpoint['name'] == selectedBarrierName);
-                    int checkpointId = selectedCheckpoint['checkpoint_id'];
+                    String checkpointName = selectedCheckpoint['name'];
                     Navigator.of(context).pop(selectedBarrierName); // Pass the barrier name back to the caller
-                    ApiService.deleteCheckpointController(checkpointId);
+                    ApiService.deleteRequestController(checkpointName);
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyMapAppUser()));
                                     } else {
                     ScaffoldMessenger.of(context).showSnackBar(
