@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "156429264388",
-    "project_id": "push-notification---tareeqapp",
-    "storage_bucket": "push-notification---tareeqapp.appspot.com"
+    "project_number": "162564117259",
+    "project_id": "tareeq-app-b532e",
+    "storage_bucket": "tareeq-app-b532e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:156429264388:android:a874b3e03841f5fef6f751",
+        "mobilesdk_app_id": "1:162564117259:android:165ed74b61a5c8ed94080e",
         "android_client_info": {
           "package_name": "com.example.hello_world"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD70pwX2Ua13D3jAiBk4uC5voXNDPRO30s"
+          "current_key": "AIzaSyBuDq0O3yLobzhgm4KUonIBFS50aQpT6rY"
         }
       ],
       "services": {

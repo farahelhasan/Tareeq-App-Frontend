@@ -412,12 +412,12 @@ MaterialButton(
                           fontSize: 16)),
             
                             GestureDetector(
-  onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Signup()),
-      );
-  },
+  // onTap: () {
+  //     Navigator.push(
+  //       context,
+  //   //    MaterialPageRoute(builder: (context) => Signup()),
+  //     );
+  // },
   child: Column(
     children: [
       Text(

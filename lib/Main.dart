@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/Welcom.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-      void main() {
+
+      void main() async{
+        WidgetsFlutterBinding.ensureInitialized();
+        await Firebase.initializeApp(
+       options: DefaultFirebaseOptions.currentPlatform,
+     );
       runApp(MyApp());
       }
 
@@ -17,7 +25,7 @@ import 'package:hello_world/Welcom.dart';
       Widget build(BuildContext context) {
       return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Welcome(), 
+      home: kIsWeb ? Welcomweb() : Welcome()
       );
       }
       }

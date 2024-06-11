@@ -12,51 +12,48 @@ void main() {
     home: CheckpointDetailsBody(),
   ));
 }
+
 class CheckpointDetailsBody extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-         appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-        onPressed: () {
-  if (question.isadmin){
-  Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => MyHomePage()),
-  );
-    }else{
-  Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => MyMapAppUser()),
-  );
-    }
-  },
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 30,
-            color: Colors.indigo[900],
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () {
+              if (question.isadmin) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyMapAppUser()),
+                );
+              }
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 30,
+              color: Colors.indigo[900],
+            ),
           ),
-          
-        ),
-        title: Align(
-          alignment: Alignment.centerRight,
-          child: Text(checkpointinfo.name , 
-           style: TextStyle(
-                  color: Colors.indigo[900],
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  
-                ),
-               
+          title: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              checkpointinfo.name,
+              style: TextStyle(
+                color: Colors.indigo[900],
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
-      ),
-
         body: Column(
           children: [
             // TabBar
@@ -72,7 +69,7 @@ class CheckpointDetailsBody extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(248, 252, 252, 250),
+                  color: Colors.indigo[900],
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
@@ -109,7 +106,7 @@ class CheckpointDetailsBody extends StatelessWidget {
             child: Text(
               'معلومات الحاجز',
               style: TextStyle(
-                color: Colors.indigo[900],
+                color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -122,7 +119,7 @@ class CheckpointDetailsBody extends StatelessWidget {
         _buildAttributeRow(checkpointinfo.status_out, ' :الخارج'),
         _buildAttributeRow(checkpointinfo.average_time_out.toString(), ' : الوقت المتوقع للانتظار'),
         _buildAttributeRow(checkpointinfo.updatedAt, " "),
-        _buildSmallerAttributeRow("","اضافة الى المفضلة")
+        _buildSmallerAttributeRow("", "اضافة الى المفضلة")
       ],
     );
   }
@@ -131,6 +128,7 @@ class CheckpointDetailsBody extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
+        color: Colors.grey[200],
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: const Color.fromRGBO(26, 35, 126, 1),
@@ -183,10 +181,10 @@ class CheckpointDetailsBody extends StatelessWidget {
     );
   }
 
-}
   Widget _buildSmallerAttributeRow(String value, String label) {
     return _SmallerAttributeRow(value: value, label: label);
   }
+}
 
 class _SmallerAttributeRow extends StatefulWidget {
   final String value;
@@ -201,7 +199,6 @@ class _SmallerAttributeRow extends StatefulWidget {
 class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
   bool isFavorite = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -210,7 +207,8 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
 
   Future<void> _loadFavoriteStatus() async {
     try {
-      bool status = await ApiService.checkFavoriteController(pathinfo.user_id, checkpointinfo.checkpointid);
+      bool status = await ApiService.checkFavoriteController(
+          pathinfo.user_id, checkpointinfo.checkpointid);
       setState(() {
         isFavorite = status;
       });
@@ -222,19 +220,17 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      
       child: Container(
         padding: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-          
+          color:Colors.grey[200],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-           color: const Color.fromRGBO(26, 35, 126, 1),
+            color: const Color.fromRGBO(26, 35, 126, 1),
             width: 3,
           ),
         ),
         child: Row(
-          
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -246,25 +242,22 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
               ),
             ),
             SizedBox(width: 8),
-            // Text(
-            //   widget.value,
-            //   style: TextStyle(fontSize: 12),
-            // ),
-            // SizedBox(width: 10),
             IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 color: isFavorite ? Colors.red : Colors.grey,
               ),
-            onPressed: () async {
+              onPressed: () async {
                 setState(() {
                   isFavorite = !isFavorite;
                 });
                 try {
                   if (isFavorite) {
-                    await ApiService.setFavoriteController(profileinfo.user_id, checkpointinfo.checkpointid);
+                    await ApiService.setFavoriteController(
+                        profileinfo.user_id, checkpointinfo.checkpointid);
                   } else {
-                    await ApiService.removeFavorite(checkpointinfo.checkpointid,profileinfo.user_id);
+                    await ApiService.removeFavorite(
+                        checkpointinfo.checkpointid, profileinfo.user_id);
                   }
                 } catch (e) {
                   print('Failed to update favorite status: $e');
