@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:hello_world/CheckpointList.dart';
@@ -584,7 +585,7 @@ class login extends StatelessWidget {
                     MaterialButton(
                       onPressed: () async {
                         if (emailstate.currentState!.validate() & passwordstate.currentState!.validate()) {
-                          ApiService.loginController(email.toString(), password.toString()).then((response) {
+                          ApiService.loginController(email.toString(), password.toString()).then((response) async {
                             if (response['success']) {
                               var userData = response['data'];
                               Globals.userId = userData['user_id'];
@@ -593,8 +594,12 @@ class login extends StatelessWidget {
                               Globals.password = userData['password'];
                               Globals.username = userData['username'];
                               Globals.profile_picture_url = userData['profile_picture_url'];
-
-                              
+                              final fcmToken = await FirebaseMessaging.instance.getToken();
+                              print('token: $fcmToken');
+                              print('token:');
+                              // save the token in database.
+                              await ApiService.saveToken(userData['user_id'], fcmToken);
+                              print("yesssss");
                                   if (userData['user_id'] == 1) {
                                     Globals.ifadmin=true;
                                     Navigator.push(

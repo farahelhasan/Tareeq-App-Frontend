@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ApiService.dart';
+import 'package:hello_world/LiveQuestionsCheckpoints.dart';
 import 'package:hello_world/Settings.dart';
 import 'package:intl/intl.dart';
 import 'package:hello_world/CheckpointsInfo.dart';
@@ -30,7 +31,7 @@ class _PostCardState extends State<PostCard> {
   int _replayCounter = 1;
     
   void _addReplays() {
-    setState(() {
+    setState(() async {
       String newComment = replaycontroller.text;
       if (newComment.isNotEmpty) {
         widget.comments.add(
@@ -43,6 +44,15 @@ class _PostCardState extends State<PostCard> {
           ),
         );
         ApiService.addQuestionReplayController(widget.questionId, newComment, profile.user_id);
+        //send notification
+        //first: get the userId (who make the question) from question id.
+        int userId = await ApiService.getuserId(widget.questionId);
+        print("faraaaaaaaaaaaaaah $userId");
+        //second: get the token for user who make the question.
+        String token = await ApiService.getToken(userId);
+                print("faraaaaaaaaaaaaaah $token");
+        //send notification.
+        await ApiService.sendNotification(token,  profile.name, newComment);
         Navigator.push(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
         _replayCounter++;
         replaycontroller.clear();

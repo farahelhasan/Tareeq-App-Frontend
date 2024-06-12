@@ -258,6 +258,8 @@ class _CommentsState extends State<Comments> {
               });
               print("before call add");
               await _addComment(checkpointinfo.checkpointid, _comment, imageToAdd, userId);
+            
+
             },
           )
 

@@ -713,6 +713,78 @@ static Future<Map<String, dynamic>> setWaitingTime(int checkpoint_id, double dur
     }
 }
 
+////// NOTIFICATION //////
+// send notification.
+static Future<Map<String, dynamic>> sendNotification(final token, String name, String replay_description) async {
+    final response = await http.post(
+    Uri.parse('$apiUrl/notification/send'),
+     body: json.encode({
+    'token': token,
+    'name' : name,
+    'replay_description': replay_description,
+    }), 
+    headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 201) {
+      print("notification1: ${response.body}");
+    return json.decode(response.body); //  successful.
+    } else {
+    throw Exception('Failed to set data'); //  failed.
+    }
+}
+
+// save the token in database.
+static Future<Map<String, dynamic>> saveToken(int user_id, final token) async {
+    final response = await http.post(
+    Uri.parse('$apiUrl/notification/saveToken'),
+     body: json.encode({
+    'token': token,
+    'user_id' : user_id,
+  
+    }), 
+    headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 201) {
+      print("notification1: ${response.body}");
+    return json.decode(response.body); //  successful.
+    } else {
+    throw Exception('Failed to set data'); //  failed.
+    }
+}
+
+// get userId for specific question.
+static Future<int> getuserId(int questionId) async {
+    final response = await http.get(
+    Uri.parse('$apiUrl/liveQuestion/getUser/$questionId'), 
+    headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        print(responseBody);
+    // Assuming the response is a map with a boolean value, adjust this as necessary
+    return responseBody['userId'] ;
+    }
+    else{
+      throw Exception('Failed to load data hereee'); // get user failed.
+   }
+}
+
+// get token for specific user.
+static Future<String> getToken(int userId) async {
+    final response = await http.get(
+    Uri.parse('$apiUrl/notification/getToken/$userId'), 
+    headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+        final responseBody = json.decode(response.body);
+        print("faraaaaaaaaaaaaaaah $responseBody");
+        return responseBody['token'];
+    }
+    else{
+      throw Exception('Failed to load data'); // get user failed.
+   }
+}
 
 
 
