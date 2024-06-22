@@ -1,11 +1,24 @@
+//import 'package:hello_world/HomePageWeb.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiService {
-static final String apiUrl = 'http://10.0.2.2:3000';   
-//static final String apiUrl = 'http://localhost:3000';   
+//static final String apiUrl = 'http://10.0.2.2:3000';   
+static final String apiUrl = 'http://localhost:3000';   
 
 static bool isvalid =true;
+
+// static Future<List<Review>> fetchReviews() async {
+//   final response = await http.get(Uri.parse('https://your-api-endpoint/reviews'));
+
+//   if (response.statusCode == 200) {
+//     List<dynamic> jsonList = json.decode(response.body);
+//     return jsonList.map((json) => Review.fromJson(json)).toList();
+//   } else {
+//     throw Exception('Failed to load reviews');
+//   }
+// }
+
 //////// auth ////////
 // login 
 static Future<Map<String, dynamic>> loginController(String email, String password) async {
@@ -18,6 +31,9 @@ body: json.encode({
 }), 
 headers: {'Content-Type': 'application/json'},
 );
+  print("Response status code: ${response.statusCode}");
+  print("Response body: ${response.body}");
+  
 if (response.statusCode == 200) {
 return json.decode(response.body); // Login successful.
 } else {
@@ -658,7 +674,8 @@ static Future<Map<String, dynamic>> editUserController({
   String? name,
   String? username,
   String? email,
-  String? password,
+  String? password, 
+  String? profile_picture_url,
 }) async {
   try {
     Map<String, dynamic> requestBody = {};
@@ -676,6 +693,10 @@ static Future<Map<String, dynamic>> editUserController({
     if (password != null) {
       requestBody['password'] = password;
     }
+    if (profile_picture_url != null) {
+      requestBody['profile_picture_url'] = profile_picture_url;
+    }
+
     
     final response = await http.put(
       Uri.parse('$apiUrl/user/edit/$userId'),

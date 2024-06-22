@@ -29,26 +29,29 @@ class _PostCardState extends State<PostCard> {
   TextEditingController replaycontroller = TextEditingController();
   int _replayCounter = 1;
     
+
   void _addReplays() {
+    print(profile.user_id);
     setState(() {
       String newComment = replaycontroller.text;
       if (newComment.isNotEmpty) {
         widget.comments.add(
           Comment(
-            name: profile.name,
+            name: question.name,
             comment: newComment,
             timestamp: DateTime.now(),
             commentNumber: _replayCounter,
             userId: profile.user_id,
           ),
         );
-        ApiService.addQuestionReplayController(widget.questionId, newComment, profile.user_id);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
+        ApiService.addPathReplayController(widget.questionId, newComment, profile.user_id);
+        //Navigator.push(context, MaterialPageRoute(builder: (context) =>CheckpointDetailsBody()));
         _replayCounter++;
         replaycontroller.clear();
       }
     });
   }
+
   
 void _deleteQuestion() {
   print('Question ID: ${widget.questionId}');

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ApiService.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class AddCheckpointPage extends StatefulWidget {
   @override
@@ -11,8 +9,8 @@ class AddCheckpointPage extends StatefulWidget {
 class _AddCheckpointPageState extends State<AddCheckpointPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _xController = TextEditingController();
-  final _yController = TextEditingController();
+  //final _xController = TextEditingController();
+  //final _yController = TextEditingController();
 
   final _xSignInController = TextEditingController();
   final _ySignInController = TextEditingController();
@@ -280,6 +278,7 @@ class _AddCheckpointPageState extends State<AddCheckpointPage> {
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: AddCheckpointPage(),
   ));
 }

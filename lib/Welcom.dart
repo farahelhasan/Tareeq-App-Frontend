@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/login.dart';
+import 'package:hello_world/LogIn.dart';
 
   void main() {
-  runApp(MaterialApp(
-  home: Welcome(),
+  runApp(MaterialApp(home: Welcome(),
+    debugShowCheckedModeBanner: false,
+
   ));
   }
 
@@ -103,7 +103,7 @@ import 'package:hello_world/login.dart';
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  width: 150,
+                  width: 300,
                   height: 50,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -127,6 +127,7 @@ import 'package:hello_world/login.dart';
     );
   }
 }
+  
   class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
   @override
@@ -218,7 +219,7 @@ import 'package:hello_world/login.dart';
   onTap: () {
   Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) => LoginPage()),
+  MaterialPageRoute(builder: (context) => login()),
   );
   },
   child: Container(
@@ -248,12 +249,4 @@ import 'package:hello_world/login.dart';
   }
   }
 
-  class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-  return MaterialApp(
-  debugShowCheckedModeBanner: false,
-  home: kIsWeb ? loginweb() : login(),
-  );
-  }
-  }
+

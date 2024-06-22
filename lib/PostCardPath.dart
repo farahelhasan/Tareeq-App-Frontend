@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/ApiService.dart';
 import 'package:hello_world/PathQuestions.dart';
@@ -55,7 +56,7 @@ class _PostCardState extends State<PostCard> {
           ),
         );
         ApiService.addPathReplayController(widget.pathId, newComment, profile.user_id);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+       // Navigator.push(context, MaterialPageRoute(builder: (context) =>kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
         _replayCounter++;
         replaycontroller.clear();
       }
@@ -74,7 +75,7 @@ class _PostCardState extends State<PostCard> {
               onPressed: () {
                 ApiService.deletePathController(widget.pathId).then((_) {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
 
                 }).catchError((error) {
                   print('Error deleting question: $error');
@@ -86,7 +87,7 @@ class _PostCardState extends State<PostCard> {
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context) =>kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
               },
               child: Text('الغاء'),
             ),
@@ -129,7 +130,7 @@ void _editReplay(Comment comment) {
               print("hoiooooooooo");
               _editComment(comment.commentNumber, updatedComment);
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
 
             },
             child: Text('حفظ'),

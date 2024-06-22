@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/Welcom.dart';
-import 'package:hello_world/SignUp.dart';
 
 
 

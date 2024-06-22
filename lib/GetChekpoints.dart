@@ -12,7 +12,7 @@ Future<List<Marker>> convertToMarkers(BuildContext context) async {
   try {
     List<Map<String, dynamic>> checkpointsData = await ApiService.checkpointsListController();
     List<Marker> markers = [];
-    // the first for loop is to make the ceckpoints list appear in the map as a markers.
+   
     for (var checkpointData in checkpointsData) {
       markers.add(
         Marker(

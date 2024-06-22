@@ -1,115 +1,170 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:hello_world/ApiService.dart'; // Replace with your ApiService import
 
-void main() {
-  runApp(MyAppReview());
-}
-
-class MyAppReview extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('تقييم التطبيق'),
-        ),
-        body: Center(
-          child: ReviewButton(),
-        ),
-      ),
-    );
-  }
-}
-
-class ReviewButton extends StatelessWidget {
-  void _showReviewDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ReviewDialog();
-      },
-    );
-  }
+class FeedbackMain extends StatefulWidget {
+  const FeedbackMain({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => _showReviewDialog(context),
-      child: Text('Review Application'),
-    );
-  }
+  State<FeedbackMain> createState() => _FeedbackMainState();
 }
 
-class ReviewDialog extends StatefulWidget {
+class _FeedbackMainState extends State<FeedbackMain> {
+  List<Map<String, dynamic>> feedbackArray = [
+  ];
+
+  
   @override
-  _ReviewDialogState createState() => _ReviewDialogState();
-}
+  void initState() {
+    super.initState();
+    _initializeUsers();
+  }
 
-class _ReviewDialogState extends State<ReviewDialog> {
-  final _formKey = GlobalKey<FormState>();
-  String _review = '';
-  int _rating = 1;
 
-  void _submitReview() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      // Handle review submission
-      print('Review: $_review');
-      print('Rating: $_rating');
-      Navigator.of(context).pop();
+Future<void> _initializeUsers() async {
+  try {
+    print("Initializing users...");
+
+    List<int> userIds = [2, 3, 4];
+
+    for (int userId in userIds) {
+      Map<String, dynamic> userData = await ApiService.getUserController(userId);
+      print("User data for user $userId: $userData");
+
+      if (userData['data'] != null && userData['data'] is Map<String, dynamic>) {
+        var userDataMap = userData['data'];
+
+        // Add specific feedback data
+        feedbackArray.addAll([
+          {
+            'feedbackcomment':
+                'سهل علينا الوصول للمعلومات وكان ممتاز جدا وساعدنا احنا الفلسطينين على الوصول لافضل المعلومات عن الحواجز',
+            'feedback': 'رائع',
+            'profileimage': userDataMap['profile_picture_url'],
+            'name': 'جنى حسن'
+          },
+          {
+            'feedbackcomment': 'ممتاز جدا',
+            'feedback': 'ممتاز',
+            'profileimage': userDataMap['profile_picture_url'],
+            'name': 'هديل الحسن'
+          },
+          {
+            'feedbackcomment': 'تجربة مذهلة!',
+            'feedback': 'رائع',
+            'profileimage': userDataMap['profile_picture_url'],
+            'name': 'فرح الحسن'
+          },
+        ]);
+
+        // Optionally, you can use feedbackArray.add() for each feedback item instead of addAll() if needed
+      } else {
+        print("User data for user $userId is null or not a Map");
+      }
     }
+
+    setState(() {}); // Update the UI after fetching data
+  } catch (e) {
+    print("Error: $e");
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Review Application'),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Your Review'),
-              maxLines: 3,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter your review';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _review = value!;
+    return Scaffold(
+      backgroundColor: Color(0xFFffffff),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 15,
+          ),
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: feedbackArray.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    width: kIsWeb ? 620 : 340,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: Colors.white,
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Container(
+                            color: Colors.indigo[900],
+                            height: kIsWeb ? 320 : 300,
+                            width: kIsWeb ? 420 : 350,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "،،",
+                                  style: TextStyle(
+                                    fontSize: 60,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  feedbackArray[index]["feedbackcomment"],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  feedbackArray[index]["feedback"],
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                               CircleAvatar(
+  radius: 30.0,
+  backgroundImage: NetworkImage(
+    feedbackArray[index]["profileimage"],
+  ),
+),
+
+                                Text(
+                                  feedbackArray[index]["name"],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
             ),
-            SizedBox(height: 16.0),
-            DropdownButtonFormField<int>(
-              decoration: InputDecoration(labelText: 'Rating'),
-              value: _rating,
-              items: [1, 2, 3, 4, 5]
-                  .map((int value) => DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(value.toString()),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _rating = value!;
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _submitReview,
-          child: Text('Submit'),
-        ),
-      ],
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:hello_world/GetChekpoints.dart';
 void main() {
   runApp(MaterialApp(
     title: 'Live Questions',
+    debugShowCheckedModeBanner: false,
     home: LiveQuestionsCheckpoints(),
   ));
 }
@@ -227,7 +228,7 @@ void _postQuestion() async {
       int questionId = DateTime.now().millisecondsSinceEpoch.toInt();
       setState(() {
         _questions.add(PostCard(
-          name: profileinfo.username,
+          name: profileinfo.name,
           question: questionText,
           comments: [],
           questionId: questionId,

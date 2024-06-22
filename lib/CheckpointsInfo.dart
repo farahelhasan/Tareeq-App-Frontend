@@ -9,6 +9,7 @@ import 'package:hello_world/Settings.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: CheckpointDetailsBody(),
   ));
 }
@@ -20,7 +21,7 @@ class CheckpointDetailsBody extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          //backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             onPressed: () {
@@ -68,13 +69,7 @@ class CheckpointDetailsBody extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.indigo[900],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
-                ),
+              color: Colors.indigo[900],
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TabBarView(
@@ -99,7 +94,6 @@ class CheckpointDetailsBody extends StatelessWidget {
   Widget _buildTabView() {
     return ListView(
       children: [
-        // Title
         Center(
           child: Padding(
             padding: const EdgeInsets.all(5.0),

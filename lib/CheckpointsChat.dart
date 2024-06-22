@@ -1,13 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hello_world/CheckpointsInfo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:hello_world/ApiService.dart';
 import 'package:hello_world/Settings.dart';
 import 'package:hello_world/GetChekpoints.dart';
 import 'package:hello_world/cloud_api.dart';
+
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Comments(),
+  ));
+}
 
 class Comments extends StatefulWidget {
   @override
@@ -68,6 +75,7 @@ class _CommentsState extends State<Comments> {
       if (userData['data'] != null && userData['data'] is Map<String, dynamic>) {
         var name = userData['data'];
         return name['name'] ?? 'Unknown User';
+        
       }
     } catch (e) {
       print("Error fetching user data: $e");
@@ -91,6 +99,7 @@ class _CommentsState extends State<Comments> {
       print('farah after $imageUrl');
 
       await ApiService.addCommentController(checkpointId, commentDescription, imageUrl, userId);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
     } catch (e) {
       print("Error adding comment: $e");
     }
@@ -106,7 +115,9 @@ class _CommentsState extends State<Comments> {
         imageUrl = response.downloadLink as String;
       }
       await ApiService.editCommentController(commentId, updatedComment, imageUrl);
-      _initializeComments();
+      //_initializeComments();
+       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
+
     } catch (e) {
       print("Error editing comment: $e");
     }
@@ -116,7 +127,8 @@ class _CommentsState extends State<Comments> {
     try {
       print(commentId);
       await ApiService.deleteCommentController(commentId);
-      _initializeComments();
+      //_initializeComments();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
     } catch (e) {
       print("Error deleting comment: $e");
     }
@@ -133,6 +145,7 @@ class _CommentsState extends State<Comments> {
         _image = File(pickedFile.path);
         _imageBytes = _image?.readAsBytesSync();
         _imageName = _image!.path.split('/').last;
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
       });
                 print("farah get inside get $_imageName hhh $_imageBytes hhh--------------- $_image");
 
