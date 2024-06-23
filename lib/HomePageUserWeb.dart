@@ -33,7 +33,7 @@ class _MapAppWebState extends State<Homepageuserweb> {
   GoogleMapController? gmc;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<Marker> markers = [];
-  List<Marker> filteredMarkers = []; // For filtered markers
+  List<Marker> filteredMarkers = []; 
   TextEditingController searchController = TextEditingController();
   int selectedindex = 1;
   String? image; 
@@ -47,8 +47,7 @@ class _MapAppWebState extends State<Homepageuserweb> {
   void initState() {
     super.initState();
     initialStream();
-        _initializeUser();
-
+    _initializeUser();
     _loadMarkers();
   }
 
@@ -482,7 +481,7 @@ actions:
 
 class MarkerSearchDelegate extends SearchDelegate<String> {
  final List<Marker> markers;
-  final Function(String) filterCallback;
+ final Function(String) filterCallback;
 
   MarkerSearchDelegate(this.markers, this.filterCallback);
 
@@ -524,27 +523,31 @@ class MarkerSearchDelegate extends SearchDelegate<String> {
   }
 
 @override
-  Widget buildSuggestions(BuildContext context) {
-    List<Marker> suggestionList = query.isEmpty
-        ? markers
-        : markers.where((marker) {
-            return marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase());
-          }).toList();
+Widget buildSuggestions(BuildContext context) {
+ List<Marker> suggestionList = query.isEmpty
+    ? markers
+    : markers.where((marker) =>
+        marker.infoWindow != null &&
+        marker.infoWindow.title != null &&
+        marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase())
+    ).toList();
 
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        Marker marker = suggestionList[index];
-        return ListTile(
-          title: Text(marker.infoWindow.title!),
-          onTap: () {
-            filterCallback(marker.infoWindow.title!); // Apply filter
-            close(context, marker.infoWindow.title!); // Close search and pass result
-          },
-        );
-      },
-    );
-  }
+
+  return ListView.builder(
+    itemCount: suggestionList.length,
+    itemBuilder: (context, index) {
+      Marker marker = suggestionList[index];
+      return ListTile(
+        title: Text(marker.infoWindow!.title!),
+        onTap: () {
+          filterCallback(marker.infoWindow!.title!); // Apply filter
+          close(context, marker.infoWindow!.title!); // Close search and pass result
+        },
+      );
+    },
+  );
+}
+
 }
 
 class ReviewDialog extends StatefulWidget {
