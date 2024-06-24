@@ -21,7 +21,7 @@ class _LiveQuestionsState extends State<LiveQuestions> {
   TextEditingController _fromController = TextEditingController();
   TextEditingController _toController = TextEditingController();
   List<PostCard> _path = [];
-
+  List<PostCard> _filteredPath = [];
   @override
   void initState() {
     super.initState();
@@ -66,6 +66,7 @@ class _LiveQuestionsState extends State<LiveQuestions> {
         }
         setState(() {
           _path = allPathDataList;
+           _filteredPath = List.from(_path);
       });
     }
     } catch (e) {
@@ -142,14 +143,29 @@ class _LiveQuestionsState extends State<LiveQuestions> {
   ),
 
   ),
+      actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: PathSearchDelegate(_path, (query) {
+                  _filterQuestions(query);
+                }),
+              );
+            },
+            icon: Icon(Icons.search , 
+            color: Colors.white,
+            size: 25,),
+          ),
+        ],
       ),
     
       body: Stack(   
         children: [
           ListView.builder(
-            itemCount: _path.length,
-            itemBuilder: (context, index) {
-              return _path[index];
+           itemCount: _filteredPath.length,
+                itemBuilder: (context, index) {
+             return _filteredPath[index];
             },
           ),
           Positioned(
@@ -182,6 +198,20 @@ class _LiveQuestionsState extends State<LiveQuestions> {
       ),
     );
   }
+
+    void _filterQuestions(String query) {
+    setState(() {
+      if (query.isNotEmpty) {
+        _filteredPath = _path
+            .where((postCard) =>
+                postCard.pathquestion.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else {
+        _filteredPath = List.from(_path); // Show all questions if query is empty
+      }
+    });
+  }
+
 
   void _showQuestionDialog() {
     showDialog(
@@ -319,6 +349,7 @@ void _postQuestion(int pathId, int userId, bool isCurrentUser) {
           userIsOwner: isCurrentUser,
         ),
       );
+       _filteredPath = List.from(_path); 
     });
     ApiService.addPathQuestionController(from, to, profile.user_id);
     Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
@@ -328,6 +359,75 @@ void _postQuestion(int pathId, int userId, bool isCurrentUser) {
 }
 
 }
+
+
+  class PathSearchDelegate extends SearchDelegate<String> {
+  final List<PostCard> pathList;
+  final Function(String) filterCallback;
+
+  PathSearchDelegate(this.pathList, this.filterCallback);
+
+  @override
+  String get searchFieldLabel => 'ابحث هنا...';
+
+  @override
+  TextStyle get searchFieldStyle =>
+      TextStyle(fontSize: 18, color: Colors.indigo[900]);
+
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          filterCallback(''); // Clear filter
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, ''); // Close search without passing a result
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Implement if needed
+    return Container();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<PostCard> suggestionList = query.isEmpty
+        ? pathList
+        : pathList.where((postCard) {
+            return postCard.pathquestion.toLowerCase().contains(query.toLowerCase());
+          }).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        PostCard postCard = suggestionList[index];
+        return ListTile(
+          title: Text(postCard.pathquestion),
+          onTap: () {
+            filterCallback(postCard.pathquestion); // Apply filter
+            close(context, postCard.pathquestion); // Close search and pass result
+          },
+        );
+      },
+    );
+  }
+}
+
 
 class Pathinfo {
   static int path_id = 0;

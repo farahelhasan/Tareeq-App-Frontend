@@ -4,6 +4,8 @@ import 'package:hello_world/Settings.dart';
 import 'package:hello_world/CheckpointsInfo.dart'; 
 import 'package:hello_world/GetChekpoints.dart';
 
+import 'MapPageUser.dart';
+
 
 
 
@@ -101,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () async {
                             // Call the function to remove the item from the database
                             try {
-                              await ApiService.deleteCheckpointController(data[index]['checkpoint_id']);
+                               await ApiService.removeFavorite( data[index]['checkpoint_id'], profileinfo.user_id);
                             } catch (error) {
                               print('Error removing checkpoint from database: $error');
                               // Handle any errors that occur during database removal

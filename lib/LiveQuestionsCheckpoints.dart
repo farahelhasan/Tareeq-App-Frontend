@@ -93,14 +93,7 @@ class _LiveQuestionsCheckpointsState extends State<LiveQuestionsCheckpoints> {
             child: Container(
               height: 40,
               width: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: Color.fromARGB(255, 40, 43, 152),
-                  width: 2,
-                ),
-                color: Colors.grey[200],
-              ),
+              color: Color.fromARGB(255, 40, 43, 152),
               child: ElevatedButton(
                 onPressed: _showQuestionDialog,
                 style: ElevatedButton.styleFrom(

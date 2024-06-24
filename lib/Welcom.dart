@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/login.dart';
+import 'package:hello_world/LogIn.dart';
 
   void main() {
 
@@ -99,7 +99,7 @@ import 'package:hello_world/login.dart';
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(builder: (context) => login()),
                   );
                 },
                 child: Container(
@@ -219,7 +219,7 @@ import 'package:hello_world/login.dart';
   onTap: () {
   Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) => LoginPage()),
+  MaterialPageRoute(builder: (context) => login()),
   );
   },
   child: Container(
@@ -249,12 +249,12 @@ import 'package:hello_world/login.dart';
   }
   }
 
-  class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-  return MaterialApp(
-  debugShowCheckedModeBanner: false,
-  home: kIsWeb ? loginweb() : login(),
-  );
-  }
-  }
+  // class LoginPage extends StatelessWidget {
+  // @override
+  // Widget build(BuildContext context) {
+  // return MaterialApp(
+  // debugShowCheckedModeBanner: false,
+  // home: kIsWeb ? loginweb() : login(),
+  // );
+  // }
+  // }

@@ -7,8 +7,9 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:Colors.indigo[900],
       appBar: AppBar(
-        backgroundColor: Colors.indigo[900],
+backgroundColor:Colors.indigo[900],
         elevation: 0,
         leading: IconButton(
         onPressed: () {
@@ -48,7 +49,7 @@ class AboutPage extends StatelessWidget {
         ),
 ),
       body: Container(
-        color: Colors.indigo[900],
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -59,7 +60,7 @@ class AboutPage extends StatelessWidget {
                child: Container(
                  decoration: BoxDecoration(
                    border: Border.all(
-                     color: Colors.white,
+                             color: const Color.fromRGBO(26, 35, 126, 1),
                      width: 2,
                    ),
                    borderRadius: BorderRadius.circular(10),
@@ -69,7 +70,7 @@ class AboutPage extends StatelessWidget {
                    ' تطبيق يسمح للمستخدمين بمعرفة مواقع الحواجز على الطرق الفلسطينية وطرح الأسئلة أو إضافة تعليقات عن هذه الحواجز. يمكن للمستخدمين أيضًا الاستفسار عن الطرق التي يسلكونها ومعرفة وضع الحواجز عليها. بالإضافة إلى ذلك، يمكن للمستخدمين إضافة حواجز جديدة إلى التطبيق لمشاركتها مع المجتمع الفلسطيني',
                    style: TextStyle(
                      fontSize: 22,
-                     color: Colors.white,
+                             color: Colors.indigo[900],
                    ),
                    textAlign: TextAlign.center,
                  ),
@@ -82,7 +83,8 @@ class AboutPage extends StatelessWidget {
   style: TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
-    color: Colors.white,
+            color: Colors.indigo[900],
+
   ),
 ),
 SizedBox(height: 20),

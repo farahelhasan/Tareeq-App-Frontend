@@ -222,14 +222,7 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
     return Center(
       child: Container(
         padding: EdgeInsets.all(5.0),
-        decoration: BoxDecoration(
-          color:Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: const Color.fromRGBO(26, 35, 126, 1),
-            width: 3,
-          ),
-        ),
+        color: Color.fromARGB(255, 241, 242, 246),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

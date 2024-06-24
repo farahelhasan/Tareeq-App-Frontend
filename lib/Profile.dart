@@ -95,7 +95,7 @@ class _ProfileState extends State<Profile> {
   onPressed: () {
   Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) => MapApp()),
+  MaterialPageRoute(builder: (context) => settings()),
   );
   },
   icon: Icon(

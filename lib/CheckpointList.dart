@@ -7,6 +7,8 @@ import 'package:hello_world/PathQuestions.dart';
 import 'package:hello_world/LogIn.dart';
 import 'package:hello_world/MapPage.dart';
 import 'package:hello_world/Profile.dart';
+import 'package:hello_world/AddCheckpoint.dart';
+import 'package:hello_world/Settings.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,18 +30,68 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> data = [];
+  List<Map<String, dynamic>> filteredData = [];
+  String filterQuery = ''; 
+  int selectedindex = 1;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     fetchData();
+    filteredData = List.from(data);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: Colors.orange.shade50,
       key: _scaffoldKey,
+      bottomNavigationBar: BottomNavigationBar(
+  backgroundColor: Colors.orange.shade50,
+  onTap: (val) {
+  setState(() {
+  selectedindex = val;
+  });
+  switch (val) {
+  case 0:
+  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+  selectedindex = 1;
+  break;
+  case 1:
+  Navigator.push(context, MaterialPageRoute(builder: (context) => MyMapApp()));
+  selectedindex = 1;
+  break;
+  case 2:
+  profileinfo.name = Globals.name;
+  profileinfo.userEmail = Globals.userEmail;
+  profileinfo.username = Globals.username;
+  profileinfo.user_id = Globals.userId;
+  profileinfo.profile_picture_url = Globals.profile_picture_url;
+  Navigator.push(context, MaterialPageRoute(builder: (context) => settings()));
+  selectedindex = 1;
+  break;
+  }
+  },
+  currentIndex: selectedindex,
+  selectedItemColor: Color.fromARGB(255, 135, 145, 237),
+  unselectedItemColor: Colors.indigo[900],
+  selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+  items: [
+  BottomNavigationBarItem(
+  icon: Icon(Icons.question_answer),
+  label: "الاسئلة المباشرة",
+  ),
+  BottomNavigationBarItem(
+  icon: Icon(Icons.home),
+  label: "الصفحة الاساسية",
+  ),
+  BottomNavigationBarItem(
+  icon: Icon(Icons.settings),
+  label: "الاعدادات",
+  ),
+  ],
+  ),
       appBar: AppBar(
         backgroundColor: Colors.orange.shade50,
         title: Padding(
@@ -80,6 +132,17 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => _scaffoldKey.currentState!.openDrawer(),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search , size: 40, color: Colors.indigo[900]),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CheckpointSearchDelegate(data, filterMarkers),
+              );
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         backgroundColor: Colors.indigo[900],
@@ -175,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -186,6 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 tabs: [
                   Tab(text: 'عرض القائمة'),
                   Tab(text: 'عرض الخريطة'),
+                  Tab(text: 'إضافة حاجز'),
                 ],
               ),
             ),
@@ -193,138 +257,146 @@ class _MyHomePageState extends State<MyHomePage> {
               child: TabBarView(
                 children: [
                   ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index >= data.length) {
-                        return Container(); // Prevent index out of range
-                      }
+                           itemCount: filteredData.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index >= filteredData.length) {
+            return Container();
+          }
+
                       
-                      print("Building item at index $index: ${data[index]}");
-                      
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        padding: EdgeInsets.all(8),
+                       print("Building item at index $index: ${filteredData[index]}");
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color.fromARGB(255, 26, 35, 126)),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            key: Key(filteredData[index]['checkpoint_id'].toString()), // Unique key for each ListTile
+            title: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    print("Removing item at index $index: ${filteredData[index]['checkpoint_id']}");
+                    try {
+                      await ApiService.deleteCheckpointController(filteredData[index]['checkpoint_id']);
+                    } catch (error) {
+                      print('Error removing checkpoint from database: $error');
+                      return;
+                    }
+                    setState(() {
+                      // Remove item from filteredData using List.removeWhere
+                      filteredData.removeWhere((item) => item['checkpoint_id'] == filteredData[index]['checkpoint_id']);
+                    });
+                  },
+                  child: Container(
+                    child: CircleAvatar(
+                      radius: 17,
+                      backgroundImage: AssetImage('images/removeIcon.png'),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        filteredData[index]['name'],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 26, 35, 126),
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: CircleAvatar(
+                            radius: 18,
+                            backgroundImage: AssetImage('images/locationDesignIcon.png'),
+                          ),
+                        ),
                         decoration: BoxDecoration(
-                          border: Border.all(color: const Color.fromARGB(255, 26, 35, 126)),
+                          border: Border.all(color: Color.fromARGB(255, 26, 35, 126)),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Stack(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      print("Removing item at index $index: ${data[index]['checkpoint_id']}");
-                                      try {
-                                        await ApiService.deleteCheckpointController(data[index]['checkpoint_id']);
-                                      } catch (error) {
-                                        print('Error removing checkpoint from database: $error');
-                                        return;
-                                      }
-                                      setState(() {
-                                        data.removeAt(index);
-                                      });
-                                    },
-                                    child: Container(
-                                      child: CircleAvatar(
-                                        radius: 17,
-                                        backgroundImage: AssetImage('images/removeIcon.png'),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 0,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          data[index]['name'],
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color.fromARGB(255, 26, 35, 126),
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Container(
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: CircleAvatar(
-                                              radius: 17,
-                                              backgroundImage: AssetImage('images/locationDesignIcon.png'),
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: Color.fromARGB(255, 26, 35, 126)),
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () async {
-                                print("Tapped item at index $index: ${data[index]}");
-                                checkpointinfo.checkpointid = data[index]['checkpoint_id'];
-                                checkpointinfo.name = data[index]['name'];
-                                checkpointinfo.x_position = data[index]['x_position'];
-                                checkpointinfo.y_position = data[index]['y_position'];
-                                checkpointinfo.status_in = data[index]['status_in'];
-                                checkpointinfo.status_out = data[index]['status_out'];
-                                checkpointinfo.updatedAt = data[index]['updatedAt'];
-                                checkpointinfo.average_time_in = data[index]['average_time_in'];
-                                checkpointinfo.average_time_out = data[index]['average_time_out'];
-                                print("tapppp");
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            onTap: () async {
+              print("Tapped item at index $index: ${filteredData[index]}");
+              checkpointinfo.checkpointid = filteredData[index]['checkpoint_id'];
+              checkpointinfo.name = filteredData[index]['name'];
+              checkpointinfo.x_position = filteredData[index]['x_position'];
+              checkpointinfo.y_position = filteredData[index]['y_position'];
+              checkpointinfo.status_in = filteredData[index]['status_in'];
+              checkpointinfo.status_out = filteredData[index]['status_out'];
+              checkpointinfo.updatedAt = filteredData[index]['updatedAt'];
+              checkpointinfo.average_time_in = filteredData[index]['average_time_in'];
+              checkpointinfo.average_time_out = filteredData[index]['average_time_out'];
+              print("tapppp");
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => CheckpointDetails()),
-                                );
-                              },
-                            ),
-                            if (data[index]['complete_flag'] == false)
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => BarrierDetailsPage(checkpointId: data[index]['checkpoint_id'])),
-                                  );
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 10),
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange.shade50,
-                                    border: Border.all(color: const Color.fromARGB(255, 26, 35, 126)),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    "استكمال معلومات الحاجز",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color.fromARGB(255, 26, 35, 126),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      );
-                    },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CheckpointDetails()),
+              );
+            },
+          ),
+          if (filteredData[index]['complete_flag'] == 0 || filteredData[index]['complete_flag'] == null)
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BarrierDetailsPage(checkpointId: filteredData[index]['checkpoint_id'])),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  border: Border.all(color: const Color.fromARGB(255, 26, 35, 126)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  "استكمال معلومات الحاجز",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 26, 35, 126),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  },
+                    
                   ),
 
                   MapApp(),
+                  
+                  AddCheckpointPage(),
                 ],
               ),
             ),
           ],
         ),
       ),
+      
+    
+    
     );
   }
 
@@ -350,15 +422,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-   Future<void> fetchData() async {
+     Future<void> fetchData() async {
     try {
       List<Map<String, dynamic>> fetchedData = await ApiService.checkpointsListController();
       setState(() {
-        data = fetchedData;
+      data = List.from(fetchedData);
+      filteredData = List.from(data); // Start with all data shown
       });
     } catch (error) {
       print('Error fetching data: $error');
     }
+  }
+  void filterMarkers(String query) {
+    setState(() {
+      filterQuery = query;
+      if (query.isEmpty) {
+        filteredData = List.from(data); 
+      } else {
+        filteredData = data.where((item) {
+          return item['name'].toLowerCase().contains(query.toLowerCase());
+        }).toList();
+      }
+    });
   }
 }
 
@@ -440,6 +525,76 @@ class _AddBarrierDialogState extends State<AddBarrierDialog> {
   void dispose() {
     barrierNameController.dispose();
     super.dispose();
+  }
+  
+
+}
+
+
+class CheckpointSearchDelegate extends SearchDelegate<String> {
+  final List<Map<String, dynamic>> data;
+  final Function(String) filterCallback;
+
+  CheckpointSearchDelegate(this.data, this.filterCallback);
+
+  @override
+  String get searchFieldLabel => 'ابحث هنا...';
+
+  @override
+  TextStyle get searchFieldStyle =>
+  TextStyle(fontSize: 18, color: Colors.indigo[900]);
+
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          filterCallback(''); // Clear filter
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, ''); // Close search without passing a result
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Implement if needed
+    return Container();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<Map<String, dynamic>> suggestionList = query.isEmpty
+        ? data
+        : data.where((item) {
+            return item['name'].toLowerCase().contains(query.toLowerCase());
+          }).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        // Build suggestion list UI here
+        return ListTile(
+          title: Text(suggestionList[index]['name']),
+          onTap: () {
+            filterCallback(suggestionList[index]['name']); // Apply filter
+            close(context, suggestionList[index]['name']); // Close search and pass result
+          },
+        );
+      },
+    );
   }
 }
 
@@ -783,3 +938,4 @@ class BarrierDetailsPage extends StatelessWidget {
     );
   }
 }
+

@@ -40,7 +40,7 @@ import 'package:geolocator/geolocator.dart';
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int selectedindex = 1;
   List<Marker> markers = [];
-
+  List<Marker> filteredMarkers = []; 
   Future<void> initialStream() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -120,51 +120,21 @@ import 'package:geolocator/geolocator.dart';
   Widget build(BuildContext context) {
   return Scaffold(
   key: _scaffoldKey,
-  bottomNavigationBar: BottomNavigationBar(
-  backgroundColor: Colors.orange.shade50,
-  onTap: (val) {
-  setState(() {
-  selectedindex = val;
-  });
-  switch (val) {
-  case 0:
-  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
-  selectedindex = 1;
-  break;
-  case 1:
-  Navigator.push(context, MaterialPageRoute(builder: (context) => MyMapApp()));
-  selectedindex = 1;
-  break;
-  case 2:
-  profileinfo.name = Globals.name;
-  profileinfo.userEmail = Globals.userEmail;
-  profileinfo.username = Globals.username;
-  profileinfo.user_id = Globals.userId;
-  profileinfo.profile_picture_url = Globals.profile_picture_url;
-  Navigator.push(context, MaterialPageRoute(builder: (context) => settings()));
-  selectedindex = 1;
-  break;
-  }
-  },
-  currentIndex: selectedindex,
-  selectedItemColor: Color.fromARGB(255, 135, 145, 237),
-  unselectedItemColor: Colors.indigo[900],
-  selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-  items: [
-  BottomNavigationBarItem(
-  icon: Icon(Icons.question_answer),
-  label: "الاسئلة المباشرة",
-  ),
-  BottomNavigationBarItem(
-  icon: Icon(Icons.home),
-  label: "الصفحة الاساسية",
-  ),
-  BottomNavigationBarItem(
-  icon: Icon(Icons.settings),
-  label: "الاعدادات",
-  ),
-  ],
-  ),
+  
+        appBar: AppBar(
+         backgroundColor: Colors.orange.shade50,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: MarkerSearchDelegate(filteredMarkers, filterMarkers),
+              );
+            },
+            icon: Icon(Icons.search),
+          ),
+        ],
+      ),
     // appBar: profileinfo.user_id != 1
     //       ? AppBar(
     //           backgroundColor: Colors.orange.shade50,
@@ -306,8 +276,8 @@ import 'package:geolocator/geolocator.dart';
   },
   zoomControlsEnabled: false,
   zoomGesturesEnabled: true,
-  markers: markers.toSet(),
-  ),
+  markers: filteredMarkers.toSet(), // Display filtered markers
+),
   Positioned(
   bottom: 16.0,
   right: 16.0,
@@ -354,13 +324,95 @@ import 'package:geolocator/geolocator.dart';
   positionStream!.cancel();
   super.dispose();
   }
-  Future<void> _loadMarkers() async {
+Future<void> _loadMarkers() async {
   List<Marker> checkpointMarkers = await convertToMarkers(context);
   setState(() {
-  markers = checkpointMarkers;
+    markers = checkpointMarkers;
+    filteredMarkers = List.from(markers); // Ensure filteredMarkers starts with all markers
   });
+}
+
+void filterMarkers(String query) {
+  List<Marker> filteredList = markers.where((marker) {
+    return marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase());
+  }).toList();
+
+  print('Filtered List: $filteredList'); // Check filtered list before setState
+
+  setState(() {
+    filteredMarkers = filteredList;
+  });
+
+  print('Filtered Markers: $filteredMarkers'); // Check filteredMarkers after setState
+}
+}
+
+class MarkerSearchDelegate extends SearchDelegate<String> {
+  final List<Marker> markers;
+  final Function(String) filterCallback;
+
+  MarkerSearchDelegate(this.markers, this.filterCallback);
+
+  @override
+  String get searchFieldLabel => 'ابحث هنا...';
+
+  @override
+  TextStyle get searchFieldStyle =>
+      TextStyle(fontSize: 18, color: Colors.indigo[900]);
+
+
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
   }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
   }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Implement if needed
+    return Container();
+  }
+
+ @override
+Widget buildSuggestions(BuildContext context) {
+  List<Marker> suggestionList = query.isEmpty
+      ? markers
+      : markers.where((marker) {
+          return marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase());
+        }).toList();
+
+  return ListView.builder(
+    itemCount: suggestionList.length,
+    itemBuilder: (context, index) {
+      Marker marker = suggestionList[index];
+      return ListTile(
+        title: Text(marker.infoWindow.title!),
+        onTap: () {
+          filterCallback(marker.infoWindow.title!); // Apply filter
+          close(context, marker.infoWindow.title!); // Close search and pass result
+        },
+      );
+    },
+  );
+}
+}
 
   class profileinfo {
   static int user_id = Globals.userId;

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ApiService.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: AddCheckpointPage(),
+  ));
+}
+
 
 class AddCheckpointPage extends StatefulWidget {
   @override
@@ -22,51 +28,10 @@ class _AddCheckpointPageState extends State<AddCheckpointPage> {
   final _ySignOutController = TextEditingController();
   final _statmentOutController = TextEditingController();
 
-  // Future<void> _addCheckpoint(String name, double x, double y) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('https://yourapiurl.com/checkpoint'),
-  //       body: json.encode({
-  //         'name': name,
-  //         'x': x,
-  //         'y': y,
-  //       }),
-  //       headers: {'Content-Type': 'application/json'},
-  //     );
-
-  //     if (response.statusCode == 201) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Checkpoint added successfully')),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Failed to add checkpoint')),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to add checkpoint')),
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 26, 35, 126),
-        title: Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            "طريق",
-            style: TextStyle(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      backgroundColor: Colors.orange.shade50,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -336,6 +301,10 @@ class _AddCheckpointPageState extends State<AddCheckpointPage> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all(Size(300, 50)),
+                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 26, 35, 126)),
+                    ),
                   onPressed: ()  async {
                     if (_formKey.currentState!.validate()) {
                     // add data to checkpoint table.
@@ -347,7 +316,11 @@ class _AddCheckpointPageState extends State<AddCheckpointPage> {
                      ApiService.insertIntoLookupController(_xSignOutController.text, _ySignOutController.text, checkpoint_id, "out", _statmentOutController.text);
                      }
                   },
-                  child: Text('اضافة'),
+                  child: Text('اضافة' , style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),),
                 ),
               ],
             ),
@@ -356,10 +329,4 @@ class _AddCheckpointPageState extends State<AddCheckpointPage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: AddCheckpointPage(),
-  ));
 }

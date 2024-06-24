@@ -21,7 +21,7 @@ import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
   elevation: 0,
   leading: IconButton(
   onPressed: () {
-  if (profile.isadmin){
+  if (Globals.ifadmin){
   Navigator.push(
   context,
   MaterialPageRoute(builder: (context) => MyHomePage()),

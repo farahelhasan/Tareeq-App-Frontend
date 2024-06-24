@@ -43,23 +43,26 @@ Future<List<Marker>> convertToMarkers(BuildContext context) async {
               // //هون بصير كل ما يرجع حاجز يحسب معه
               print('hiiiiiiii -------------------------------');
 
-             // startTrackingPosition();
            
             },
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         ),
       );
-    }
-    // the secound for loop is to loop in all checkpoint to calculate waiting time when the user start tracking.
-    for (var checkpointData in checkpointsData) {
-      checkpointinfo.x_position = checkpointData['x_position'];
-      checkpointinfo.y_position = checkpointData['y_position'];
-      checkpointinfo.checkpointid = checkpointData['checkpoint_id'];
-    //  startTrackingPosition();
 
     }
-    startTrackingPosition();
+    //the secound for loop is to loop in all checkpoint to calculate waiting time when the user start tracking.
+    // for (var checkpointData in checkpointsData) {
+    //   checkpointinfo.x_position = checkpointData['x_position'];
+    //   checkpointinfo.y_position = checkpointData['y_position'];
+    //   checkpointinfo.checkpointid = checkpointData['checkpoint_id'];
+    //       print("test for ${checkpointData['name']}");
+
+    //   startTrackingPosition(checkpointinfo.x_position, checkpointinfo.y_position , checkpointinfo.checkpointid );
+    //       print("test for after calling the function");
+
+    // }
+    startTrackingPosition(checkpointsData);
     return markers;
   } catch (e) {
     print("Error in convertToMarkers: $e");
@@ -69,89 +72,195 @@ Future<List<Marker>> convertToMarkers(BuildContext context) async {
 
 
 
- void startTrackingPosition() {
+ void startTrackingPosition(List<Map<String, dynamic>> checkpointsData) {
         checkpointinfo.waitingTime = 0.0; // Reset avgtime
         checkpointinfo.y_start =0.0;
         checkpointinfo.x_start =0.0;
-  positionStream?.cancel();
-  positionStream = Geolocator.getPositionStream().listen((Position position) {
-    double distanceInMeters = Geolocator.distanceBetween(
-      position.latitude,
-      position.longitude,
-      checkpointinfo.x_position,
-      checkpointinfo.y_position,
-    );
-                
-    if(distanceInMeters <= 1000) {
-        // to know the direction later.
-        if((checkpointinfo.y_start == 0.0 )&&( checkpointinfo.x_start == 0.0)){
-          checkpointinfo.y_start =  position.longitude;
-          checkpointinfo.x_start =  position.latitude;
-             //  double g = checkpointinfo.x_start;
-              //  print('x start: $g' );
-              //    print(checkpointinfo.y_start);
-          checkpointinfo.startTime = DateTime.now();
-                DateTime? t = checkpointinfo.startTime ;
-                print('x s1 $t');
-        }
+        double distanceInMeters=100000;
+        int startTimer = 0;
+        int catchCheckpoint =0;
+     
+      positionStream?.cancel();
+      positionStream = Geolocator.getPositionStream().listen((Position position) {
+      if(catchCheckpoint == 0){
+          for (var checkpointData in checkpointsData) {
+              distanceInMeters = Geolocator.distanceBetween(
+                position.latitude,
+                position.longitude,
+                checkpointData['x_position'],
+                checkpointData['y_position'],
+              );
+              print("test for inside loop ${checkpointData['name']} destance= $distanceInMeters");
+              // check the distance.
+              if(distanceInMeters <= 1000){
+                checkpointinfo.checkpointid = checkpointData['checkpoint_id'];
+                checkpointinfo.x_position = checkpointData['x_position'];
+                checkpointinfo.y_position = checkpointData['y_position'];
+                catchCheckpoint = 1;
+                startTimer = 1;
+                print("test for start timer...with ${checkpointData['name']} id=${checkpointinfo.checkpointid} ");
+                break;
+              }else if(distanceInMeters > 1000){
+                  checkpointinfo.waitingTime = 0.0; // Reset avgtime
+                  checkpointinfo.y_start = 0.0;
+                  checkpointinfo.x_start = 0.0;
+                 // catchCheckpoint = 0;
+                  startTimer = 0;
+                //  print('x s Timer off');
+              }
+        } // checkpoint loop.
+      } // if catch checkpoint.
+      print("test for out the loop with id=${checkpointinfo.checkpointid}");
+      if(startTimer == 1){
+          print("test for start timer!!!");
+          if((checkpointinfo.y_start == 0.0 )&&( checkpointinfo.x_start == 0.0)){
+            checkpointinfo.y_start =  position.longitude;
+            checkpointinfo.x_start =  position.latitude;
+            checkpointinfo.startTime = DateTime.now();
+            DateTime? t = checkpointinfo.startTime ;
+            print('test for start time $t');
+          }
+           distanceInMeters = Geolocator.distanceBetween(
+                position.latitude,
+                position.longitude,
+                checkpointinfo.x_position,
+                checkpointinfo.y_position,
+           );
+           print("test for distance= $distanceInMeters");
+          if ((distanceInMeters).abs() < 15 ){
+              // y increase 
+              if( (position.longitude - checkpointinfo.y_start) > 0 ){
+                checkpointinfo.y_sign = '+';
+              }else { //y decrease
+                checkpointinfo.y_sign = '-';
+              }
+              // x increass
+              if( (position.latitude - checkpointinfo.x_start) > 0 ){
+                checkpointinfo.x_sign = '+';
+              }else { // x decrease
+                checkpointinfo.x_sign = '-';
+              }
+              String d = checkpointinfo.x_sign;
+              String r = checkpointinfo.y_sign;
+                    
+
+              print('test for x sign: $d y sign: $r');
+              DateTime arrivalTime = DateTime.now();
+
+              print('test for end time $arrivalTime');
+              Duration timeDifference = arrivalTime.difference(checkpointinfo.startTime!);
+              int minutes = timeDifference.inMinutes;
+              int seconds = timeDifference.inSeconds % 60;
+          //   print('Time taken after arrival: $minutes minutes and $seconds seconds');
+              double totalTimeInMinutes = minutes + (seconds / 60);
+              ///////////////////////////////////////////////
+              checkpointinfo.waitingTime = totalTimeInMinutes; ////////////
+              print('test for waiting time $totalTimeInMinutes' );
+              // call the function to make request in backend.
+              ApiService.setWaitingTime(checkpointinfo.checkpointid, checkpointinfo.waitingTime, profile.user_id, checkpointinfo.x_sign, checkpointinfo.y_sign)
+              .then((value) => {
+              print('test for response: $value')
+              });
+              
+              startTimer = 0;
+             
+          } //distance = 0 
+
+      }// stop timer.
+      distanceInMeters = Geolocator.distanceBetween(
+                position.latitude,
+                position.longitude,
+                checkpointinfo.x_position,
+                checkpointinfo.y_position,
+      );
+      if(distanceInMeters > 1000){
+        catchCheckpoint = 0;
+      }
+//     if(distanceInMeters <= 1000){
+//     //  checkpointinfo.checkpointid = checkpointData['checkpoint_id'];
+//       timerFlage = 1;
+//     //  break;
+//     }else if(distanceInMeters > 1000){
+//       timerFlage = 0;
+//      // break;
+//     }
+//     //   checkpointinfo.checkpointid = checkpointData['checkpoint_id'];
+//   // }       
+//    print("test end loop");
+
+
+//     if( timerFlage == 1) {
+//       print("x s start timer");
+//         // to know the direction later.
+//         if((checkpointinfo.y_start == 0.0 )&&( checkpointinfo.x_start == 0.0)){
+//           checkpointinfo.y_start =  position.longitude;
+//           checkpointinfo.x_start =  position.latitude;
+//              //  double g = checkpointinfo.x_start;
+//               //  print('x start: $g' );
+//               //    print(checkpointinfo.y_start);
+//           checkpointinfo.startTime = DateTime.now();
+//                 DateTime? t = checkpointinfo.startTime ;
+//                 print('x s1 $t');
+//         }
 
         
-           //     print(checkpointinfo.startTime );
-           //     print('distance: $distanceInMeters.abs()');
-       if ((distanceInMeters).abs() < 10 ) {
-            //            print("finish--------" );
+//              //  print(checkpointinfo.startTime );
+//                print('x s distance: $distanceInMeters.abs()');
+//        if ((distanceInMeters).abs() < 40 ) {
+//          print("x s finish--------" );
      
-    //    print('x sfinsh $h');
-        // y increase 
-        if( (position.longitude - checkpointinfo.y_start) > 0 ){
-          checkpointinfo.y_sign = '+';
-        }else { //y decrease
-          checkpointinfo.y_sign = '-';
-        }
-        // x increass
-        if( (position.latitude - checkpointinfo.x_start) > 0 ){
-          checkpointinfo.x_sign = '+';
-        }else { // x decrease
-          checkpointinfo.x_sign = '-';
-        }
-         String d = checkpointinfo.x_sign;
-         String r = checkpointinfo.y_sign;
+//     //    print('x sfinsh $h');
+//         // y increase 
+//         if( (position.longitude - checkpointinfo.y_start) > 0 ){
+//           checkpointinfo.y_sign = '+';
+//         }else { //y decrease
+//           checkpointinfo.y_sign = '-';
+//         }
+//         // x increass
+//         if( (position.latitude - checkpointinfo.x_start) > 0 ){
+//           checkpointinfo.x_sign = '+';
+//         }else { // x decrease
+//           checkpointinfo.x_sign = '-';
+//         }
+//          String d = checkpointinfo.x_sign;
+//          String r = checkpointinfo.y_sign;
                
 
-      //  print('x sign: $d y sign: $r');
+//       //  print('x sign: $d y sign: $r');
 
 
-        ///////////////////////////////////////////////
-        DateTime arrivalTime = DateTime.now();
+//         ///////////////////////////////////////////////
+//         DateTime arrivalTime = DateTime.now();
 
-          print('x s2 $arrivalTime');
-        Duration timeDifference = arrivalTime.difference(checkpointinfo.startTime!);
-        int minutes = timeDifference.inMinutes;
-        int seconds = timeDifference.inSeconds % 60;
-     //   print('Time taken after arrival: $minutes minutes and $seconds seconds');
-        double totalTimeInMinutes = minutes + (seconds / 60);
-        ///////////////////////////////////////////////
-        checkpointinfo.waitingTime = totalTimeInMinutes; ////////////
-        print('x s $totalTimeInMinutes' );
-        print('x sign: $d y sign: $r');
-       // print('x s  ')
+//           print('x s2 $arrivalTime');
+//         Duration timeDifference = arrivalTime.difference(checkpointinfo.startTime!);
+//         int minutes = timeDifference.inMinutes;
+//         int seconds = timeDifference.inSeconds % 60;
+//      //   print('Time taken after arrival: $minutes minutes and $seconds seconds');
+//         double totalTimeInMinutes = minutes + (seconds / 60);
+//         ///////////////////////////////////////////////
+//         checkpointinfo.waitingTime = totalTimeInMinutes; ////////////
+//         print('x s waiting time $totalTimeInMinutes' );
+//         print('x sign: $d y sign: $r');
+//        // print('x s  ')
 
-        // call the function to make request.
-      ApiService.setWaitingTime(checkpointinfo.checkpointid, checkpointinfo.waitingTime, profile.user_id, checkpointinfo.x_sign, checkpointinfo.y_sign)
-      .then((value) => {
-       print('response: $value')
-       }
-      ) ;
-      }
-    } else if(distanceInMeters > 1000){
-        checkpointinfo.waitingTime = 0.0; // Reset avgtime
-        checkpointinfo.y_start =0.0;
-        checkpointinfo.x_start =0.0;
-
-    } else {
-        print('Timer off');
-    }
-  }); // listen 
+//         // call the function to make request.
+//       ApiService.setWaitingTime(id, checkpointinfo.waitingTime, profile.user_id, checkpointinfo.x_sign, checkpointinfo.y_sign)
+//       .then((value) => {
+//        print('x s response: $value')
+//        }
+//       ) ;
+//       }
+//     } else if( timerFlage == 0){
+//         checkpointinfo.waitingTime = 0.0; // Reset avgtime
+//         checkpointinfo.y_start =0.0;
+//         checkpointinfo.x_start =0.0;
+//         print('x s Timer off');
+//     } else {
+//         print('Timer off');
+//     }
+   }
+   ); // listen 
 }
 
 class checkpointinfo{
