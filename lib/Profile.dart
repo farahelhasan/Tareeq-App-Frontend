@@ -97,6 +97,7 @@ class _ProfileState extends State<Profile> {
   height: 50,
   child: IconButton(
   onPressed: () {
+  _initializeUser();
   Navigator.push(
   context,
   MaterialPageRoute(builder: (context) => settings()),

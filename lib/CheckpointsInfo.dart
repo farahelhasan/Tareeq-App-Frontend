@@ -4,6 +4,7 @@ import 'package:hello_world/CheckpointList.dart';
 import 'package:hello_world/GetChekpoints.dart';
 import 'package:hello_world/LiveQuestionsCheckpoints.dart';
 import 'package:hello_world/CheckpointsChat.dart';
+import 'package:hello_world/LogIn.dart';
 import 'package:hello_world/MapPageUser.dart';
 import 'package:hello_world/Settings.dart';
 
@@ -21,7 +22,6 @@ class CheckpointDetailsBody extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          //backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             onPressed: () {
@@ -248,10 +248,10 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
                 try {
                   if (isFavorite) {
                     await ApiService.setFavoriteController(
-                        profileinfo.user_id, checkpointinfo.checkpointid);
+                        Globals.userId, checkpointinfo.checkpointid);
                   } else {
                     await ApiService.removeFavorite(
-                        checkpointinfo.checkpointid, profileinfo.user_id);
+                        checkpointinfo.checkpointid, Globals.userId);
                   }
                 } catch (e) {
                   print('Failed to update favorite status: $e');
@@ -269,9 +269,9 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
 }
 
 class question {
-  static int user_id = profileinfo.user_id;
-  static String name = profileinfo.name;
+  static int user_id = Globals.userId;
+  static String name = Globals.name;
   static bool isadmin = profile.isadmin;
-  static String username = profileinfo.username;
+  static String username = Globals.username;
   static int checkpointid = checkpointinfo.checkpointid;
 }

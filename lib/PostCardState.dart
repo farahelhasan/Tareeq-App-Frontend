@@ -44,8 +44,8 @@ class _PostCardState extends State<PostCard> {
             userId: profile.user_id,
           ),
         );
-        ApiService.addPathReplayController(widget.questionId, newComment, profile.user_id);
-        //Navigator.push(context, MaterialPageRoute(builder: (context) =>CheckpointDetailsBody()));
+        ApiService.addQuestionReplayController(widget.questionId, newComment, profile.user_id);
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>CheckpointDetailsBody()));
         _replayCounter++;
         replaycontroller.clear();
       }
@@ -191,7 +191,9 @@ void _deleteQuestion() {
             onPressed: () {
               print("hoiooooooooo");
               _editComment(comment.commentNumber, updatedComment);
-              Navigator.pop(context);
+
+               Navigator.pop(context);
+               
           
             },
             child: Text('حفظ'),
@@ -216,10 +218,11 @@ Future<void> _editComment(int replay_id, String updatedComment) async {
             userId: widget.comments[commentIndex].userId,
           );
           print('Comment updated locally');
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
+         
         } else {
           print('Comment with ID $replay_id not found in local state');
         }
+         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
       });
 
   } catch (e) {

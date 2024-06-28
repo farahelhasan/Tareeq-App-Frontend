@@ -115,23 +115,23 @@ class _CommentsState extends State<Comments> {
         imageUrl = response.downloadLink as String;
       }
       await ApiService.editCommentController(commentId, updatedComment, imageUrl);
-      //_initializeComments();
-       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
 
     } catch (e) {
       print("Error editing comment: $e");
     }
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
+
   }
 
   Future<void> _deleteComment(int commentId) async {
     try {
       print(commentId);
       await ApiService.deleteCommentController(commentId);
-      //_initializeComments();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
     } catch (e) {
       print("Error deleting comment: $e");
     }
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
+
   }
 
   Future<void> _getImage() async {
@@ -341,6 +341,7 @@ class _CommentsState extends State<Comments> {
           TextButton(
             onPressed: () async {
               await _editComment(commentId!, updatedComment, updatedImage);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
               Navigator.of(context).pop();
             },
             child: Text('حفظ'),
@@ -366,6 +367,7 @@ class _CommentsState extends State<Comments> {
           TextButton(
             onPressed: () async {
               await _deleteComment(commentId!);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckpointDetailsBody()));
               Navigator.of(context).pop();
             },
             child: Text(

@@ -52,8 +52,30 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     fetchData();
     filteredData = List.from(data);
+    _initializeUser();
 
-
+  }
+Future<void> _initializeUser() async {
+  try {
+  print("Initializing user...");
+  print(profile.user_id);
+  Map<String, dynamic> userNameData = await ApiService.getUserController(profile.user_id);
+  print(userNameData);
+  if (userNameData['data'] != null) {
+  if (userNameData['data'] is Map<String, dynamic>) {
+  var userData = userNameData['data'];
+  profile.userEmail = userData['email'];
+  profile.name = userData['name'];
+  profile.username = userData['username'];
+  profile.password = userData['password'];
+  profile.profile_picture_url =userData['profile_picture_url'];
+    } else {
+  print("Data is not a Map");
+  }
+  }
+  } catch (e) {
+  print("Error: $e");
+  }
   }
 
   @override
@@ -128,14 +150,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: 
                    CircleAvatar(
                       radius: 80.0,
-                      backgroundImage: NetworkImage(profile.profile_picture_url) as ImageProvider,
+                      backgroundImage: NetworkImage( profile.profile_picture_url),
                     ),
                   ),
                   SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(Globals.username, style: TextStyle(color: Colors.white)),
+                      Text(Globals.name, style: TextStyle(color: Colors.white)),
                       Text(Globals.userEmail, style: TextStyle(color: Colors.white)),
                     ],
                   ),
@@ -156,41 +178,41 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileWeb()));
                 },
               ),
+              // ListTile(
+              //   title: Text("اسأل عن الطريق التي تريد", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.question_answer, color: Colors.white),
+              //   onTap: () {
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestionsWeb()));
+              //   },
+              // ),
               ListTile(
-                title: Text("اسأل عن الطريق التي تريد", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.question_answer, color: Colors.white),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestionsWeb()));
-                },
-              ),
-              ListTile(
-                title: Text("تقييم", style: TextStyle(color: Colors.white)),
+                title: Text("متابعة تقيمات طريق", style: TextStyle(color: Colors.white)),
                 leading: Icon(Icons.feedback, color: Colors.white),
                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackMain()));
-},
-              ),
-              ListTile(
-                title: Text("اضافة حاجز طيار", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.add, color: Colors.white),
-                onTap: () {
-                  _showAddBarrierDialog(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackMain()));
                 },
               ),
-              ListTile(
-                title: Text("ازالة حاجز طيار", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.remove, color: Colors.white),
-                onTap: () {
-                  _showRemoveBarrierDialog(context);
-                },
-              ),
-               ListTile(
-                title: Text("الحواجز المفضلة", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.favorite, color: Colors.white),
-                onTap: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => MyAppFav()));
-                },
-              ),
+              // ListTile(
+              //   title: Text("اضافة حاجز طيار", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.add, color: Colors.white),
+              //   onTap: () {
+              //     _showAddBarrierDialog(context);
+              //   },
+              // ),
+              // ListTile(
+              //   title: Text("ازالة حاجز طيار", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.remove, color: Colors.white),
+              //   onTap: () {
+              //     _showRemoveBarrierDialog(context);
+              //   },
+              // ),
+              //  ListTile(
+              //   title: Text("الحواجز المفضلة", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.favorite, color: Colors.white),
+              //   onTap: () {
+              //    Navigator.push(context, MaterialPageRoute(builder: (context) => MyAppFav()));
+              //   },
+              // ),
               ListTile(
                 title: Text("حول تطبيق طريق", style: TextStyle(color: Colors.white)),
                 leading: Icon(Icons.help, color: Colors.white),
@@ -205,8 +227,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => loginweb()));
                 },
               ),
-              Container(height: 20),
-              Container(child: Image.asset("images/gpssystem.png")),
+              Container(
+                height: 120,
+                width: 120,
+                child: Image.asset("images/gpssystem.png")),
               Container(height: 10),
             ],
           ),
@@ -234,9 +258,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   ListView.builder(
                   itemCount: filteredData.length,
-        itemBuilder: (BuildContext context, int index) {
-          if (index >= filteredData.length) {
-            return Container();
+                  itemBuilder: (BuildContext context, int index) {
+                   if (index >= filteredData.length) {
+                   return Container();
           }
     print("Building item at index $index: ${filteredData[index]}");
     return Container(
@@ -249,7 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: [
           ListTile(
-            key: Key(filteredData[index]['checkpoint_id'].toString()), // Unique key for each ListTile
+            key: Key(filteredData[index]['checkpoint_id'].toString()), 
             title: Stack(
               children: [
                 GestureDetector(
@@ -262,7 +286,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       return;
                     }
                     setState(() {
-                      // Remove item from filteredData using List.removeWhere
                       filteredData.removeWhere((item) => item['checkpoint_id'] == filteredData[index]['checkpoint_id']);
                     });
                   },
@@ -487,9 +510,7 @@ class CheckpointSearchDelegate extends SearchDelegate<String> {
   String get searchFieldLabel => 'ابحث هنا...';
 
   @override
-  TextStyle get searchFieldStyle =>
-  TextStyle(fontSize: 18, color: Colors.indigo[900]);
-
+  TextStyle get searchFieldStyle => TextStyle(fontSize: 18, color: Colors.indigo[900]);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -516,11 +537,10 @@ class CheckpointSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // Implement if needed
     return Container();
   }
-
-  @override
+  
+   @override
   Widget buildSuggestions(BuildContext context) {
     List<Map<String, dynamic>> suggestionList = query.isEmpty
         ? data
@@ -543,177 +563,6 @@ class CheckpointSearchDelegate extends SearchDelegate<String> {
     );
   }
 }
-
-
-
-// class Review {
-//   final String userName;
-//   final String feedback;
-//   final String rating; // You may use enum or other structures for ratings
-
-//   Review({
-//     required this.userName,
-//     required this.feedback,
-//     required this.rating,
-//   });
-
-//   factory Review.fromJson(Map<String, dynamic> json) {
-//     return Review(
-//       userName: json['userName'],
-//       feedback: json['feedback'],
-//       rating: json['rating'],
-//     );
-//   }
-// }
-
-// class ReviewsScreen extends StatefulWidget {
-//   @override
-//   _ReviewsScreenState createState() => _ReviewsScreenState();
-// }
-
-// class _ReviewsScreenState extends State<ReviewsScreen> {
-//   late Future<List<Review>> futureReviews;
-  
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     futureReviews = ApiService.fetchReviews();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('قائمة التقييمات'),
-//       ),
-//       body: Center(
-//         child: FutureBuilder<List<Review>>(
-//           future: futureReviews,
-//           builder: (context, snapshot) {
-//             if (snapshot.hasData) {
-//               List<Review> reviews = snapshot.data!;
-//               return ListView.builder(
-//                 itemCount: reviews.length,
-//                 itemBuilder: (context, index) {
-//                   return ListTile(
-//                     title: Text(reviews[index].userName),
-//                     subtitle: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(reviews[index].feedback),
-//                         Text('التقييم: ${reviews[index].rating}'),
-//                       ],
-//                     ),
-//                   );
-//                 },
-//               );
-//             } else if (snapshot.hasError) {
-//               return Text('${snapshot.error}');
-//             }
-
-//             // By default, show a loading spinner
-//             return CircularProgressIndicator();
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
-class Review {
-  final String userName;
-  final String feedback;
-  final String rating;
-
-  Review({
-    required this.userName,
-    required this.feedback,
-    required this.rating,
-  });
-}
-
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-List<Review> reviews = [
-    Review(
-      userName: 'John Doe',
-      feedback: 'Great app, very helpful!',
-      rating: 'Excellent',
-    ),
-    Review(
-      userName: 'Jane Smith',
-      feedback: 'Needs improvement in user interface.',
-      rating: 'Good',
-    ),
-    Review(
-      userName: 'Ahmed Ali',
-      feedback: 'Not satisfied with performance.',
-      rating: 'Poor',
-    ),
-  ];
-
-  void addReview(Review review) {
-    setState(() {
-      reviews.add(review);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('قائمة التقييمات'),
-        ),
-        body: ListView.builder(
-          itemCount: reviews.length,
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 2.0,
-              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      reviews[index].userName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      reviews[index].feedback,
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      'التقييم: ${reviews[index].rating}',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-
 
 class ReviewDialog extends StatefulWidget {
   @override

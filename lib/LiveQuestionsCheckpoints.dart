@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/MapPage.dart';
+import 'package:hello_world/LogIn.dart';
+//import 'package:hello_world/MapPage.dart';
 import 'PostCardState.dart';
 import 'package:hello_world/ApiService.dart';
 import 'package:hello_world/GetChekpoints.dart';
@@ -41,9 +42,9 @@ class _LiveQuestionsCheckpointsState extends State<LiveQuestionsCheckpoints> {
               Map<String, dynamic> userNameData = await ApiService.getUserController(reply['user_id']);
               if (userNameData['data'] != null && userNameData['data'] is Map<String, dynamic>) {
                 var userData = userNameData['data'];
-                profileinfo.name = userData['name'];
+                Globals.name = userData['name'];
                 comments.add(Comment(
-                  name: profileinfo.name,
+                  name: Globals.name,
                   comment: reply['replay_description'],
                   timestamp: DateTime.parse(reply['updatedAt']),
                   commentNumber: reply['replay_id'],
@@ -55,11 +56,11 @@ class _LiveQuestionsCheckpointsState extends State<LiveQuestionsCheckpoints> {
           Map<String, dynamic> NameData = await ApiService.getUserController(questionDataItem['user_id']);
           if (NameData['data'] != null && NameData['data'] is Map<String, dynamic>) {
             var userData = NameData['data'];
-            profileinfo.name = userData['name'];
+            Globals.name = userData['name'];
           }
-          bool isCurrentUser = profileinfo.user_id == questionDataItem['user_id'];
+          bool isCurrentUser = Globals.userId == questionDataItem['user_id'];
           questionData.add(PostCard(
-            name: profileinfo.name,
+            name: Globals.name,
             question: questionDataItem['question_description'],
             comments: comments,
             questionId: questionDataItem['question_id'],
@@ -228,7 +229,7 @@ void _postQuestion() async {
       int questionId = DateTime.now().millisecondsSinceEpoch.toInt();
       setState(() {
         _questions.add(PostCard(
-          name: profileinfo.name,
+          name: Globals.name,
           question: questionText,
           comments: [],
           questionId: questionId,
@@ -236,7 +237,7 @@ void _postQuestion() async {
         ));
       });
       _questionController.clear();
-      ApiService.addLiveQuestionController(checkpointinfo.checkpointid, questionText, profileinfo.user_id);
+      ApiService.addLiveQuestionController(checkpointinfo.checkpointid, questionText, Globals.userId);
       await _initializeQuestions();
 
     } catch (e) {

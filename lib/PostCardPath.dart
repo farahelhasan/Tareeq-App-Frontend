@@ -29,17 +29,7 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   TextEditingController replaycontroller = TextEditingController();
   int _replayCounter = 1;
-
-  // void _filterPaths(String query) {
-  //   setState(() {
-  //     filteredPaths = widget.pathquestion.where((path) {
-  //       // You can customize this filtering logic based on your requirements
-  //       return path.name.toLowerCase().contains(query.toLowerCase()) ||
-  //           path.pathQuestion.toLowerCase().contains(query.toLowerCase());
-  //     }).toList();
-  //   });
-  // }
-
+  
   void _addReplays() {
     print(profile.user_id);
     print(Pathinfo.user_id);
@@ -56,7 +46,7 @@ class _PostCardState extends State<PostCard> {
           ),
         );
         ApiService.addPathReplayController(widget.pathId, newComment, profile.user_id);
-       // Navigator.push(context, MaterialPageRoute(builder: (context) =>kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
+        //Navigator.push(context, MaterialPageRoute(builder: (context) =>kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
         _replayCounter++;
         replaycontroller.clear();
       }
@@ -97,49 +87,49 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-void _editReplay(Comment comment) {
-  String updatedComment = comment.comment;
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('تعديل الرد'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              onChanged: (value) {
-                updatedComment = value; 
-              },
-              controller: TextEditingController(text: comment.comment),
-              decoration: InputDecoration(
-                hintText: 'ضع هنا الرد الذي تريده',
+  void _editReplay(Comment comment) {
+    String updatedComment = comment.comment;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('تعديل الرد'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                onChanged: (value) {
+                  updatedComment = value; 
+                },
+                controller: TextEditingController(text: comment.comment),
+                decoration: InputDecoration(
+                  hintText: 'ضع هنا الرد الذي تريده',
+                ),
               ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('الغاء'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print("hoiooooooooo");
+                _editComment(comment.commentNumber, updatedComment);
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
+              },
+              child: Text('حفظ'),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('الغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              print("hoiooooooooo");
-              _editComment(comment.commentNumber, updatedComment);
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => kIsWeb ? LiveQuestionsWeb() : LiveQuestions()));
+        );
+      },
+    );
+  }
 
-            },
-            child: Text('حفظ'),
-          ),
-        ],
-      );
-    },
-  );
-}
 
 Future<void> _editComment(int replay_id, String updatedComment) async {
   try {
@@ -192,23 +182,6 @@ Future<void> _editComment(int replay_id, String updatedComment) async {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //   Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   child: TextField(
-              //     controller: searchController,
-              //     onChanged: _filterPaths,
-              //     decoration: InputDecoration(
-              //       labelText: 'Search',
-              //       suffixIcon: IconButton(
-              //         icon: Icon(Icons.clear),
-              //         onPressed: () {
-              //           searchController.clear();
-              //           _filterPaths('');
-              //         },
-              //       ),
-              //     ),
-              //   ),
-              // ),
               Align(
                 alignment: Alignment.centerRight,
                 child: Row(

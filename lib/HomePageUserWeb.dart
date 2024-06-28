@@ -21,7 +21,6 @@ void main() {
   ));
 }
 
-
 class Homepageuserweb extends StatefulWidget {
   @override
   _MapAppWebState createState() => _MapAppWebState();
@@ -57,18 +56,18 @@ class _MapAppWebState extends State<Homepageuserweb> {
     super.dispose();
   }
 
-    Future<void> _initializeUser() async {
+  Future<void> _initializeUser() async {
     try {
       print("Initializing user...");
-      print(profile.user_id);
-      Map<String, dynamic> userData = await ApiService.getUserController(profile.user_id);
+      print(Globals.userId);
+      Map<String, dynamic> userData = await ApiService.getUserController(Globals.userId);
       print(userData);
       setState(() {
-        profile.userEmail = userData['email'];
-        profile.name = userData['name'];
-        profile.username = userData['username'];
-        profile.password = userData['password'];
-        profile.profile_picture_url = userData['profile_picture_url'];
+        Globals.userEmail = userData['email'];
+        Globals.name = userData['name'];
+        Globals.username = userData['username'];
+        Globals.password = userData['password'];
+        Globals.profile_picture_url = userData['profile_picture_url'];
       });
     } catch (e) {
       print("Error initializing user: $e");
@@ -104,14 +103,14 @@ class _MapAppWebState extends State<Homepageuserweb> {
     if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
       profileinfo.Location = true;
       positionStream = Geolocator.getPositionStream().listen(
-  (Position? position) {
-    markers.add(
+      (Position? position) {
+      markers.add(
       Marker(
         markerId: MarkerId("ME"),
         position: LatLng(position!.latitude, position.longitude),
       ),
-    
     );
+
       filteredMarkers.add(
       Marker(
         markerId: MarkerId("ME"),
@@ -130,7 +129,7 @@ class _MapAppWebState extends State<Homepageuserweb> {
     }
   }
 
-Future<void> _showMyDialog(String title, String message) async {
+  Future<void> _showMyDialog(String title, String message) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
@@ -154,7 +153,7 @@ Future<void> _showMyDialog(String title, String message) async {
           TextButton(
             child: const Text('OK!'),
             onPressed: () {
-              Navigator.of(context).pop(); // Changed to Navigator.of(context)
+              Navigator.of(context).pop(); 
             },
           ),
         ],
@@ -290,17 +289,17 @@ actions:
   Container(
   height: 60,
   width: 60,
-  child: CircleAvatar(
-                      radius: 80.0,
-                      backgroundImage: NetworkImage(profile.profile_picture_url),
-                    ),
+  child:CircleAvatar(
+  radius: 80.0,
+  backgroundImage: NetworkImage(Globals.profile_picture_url) as ImageProvider,
+),
   ),
   SizedBox(width: 10),
   Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-  Text(profileinfo.username, style: TextStyle(color: Colors.white)),
-  Text(profileinfo.userEmail, style: TextStyle(color: Colors.white)),
+  Text(Globals.name, style: TextStyle(color: Colors.white)),
+  Text(Globals.userEmail, style: TextStyle(color: Colors.white)),
   ],
   ),
   ],
@@ -377,8 +376,6 @@ actions:
   ),
   ),
   
-  
-  
   body: Container(
   child: Column(
   children: [
@@ -434,7 +431,7 @@ actions:
     List<Marker> checkpointMarkers = await convertToMarkers(context);
     setState(() {
       markers = checkpointMarkers;
-      filteredMarkers = List.from(markers); // Ensure filteredMarkers starts with all markers
+      filteredMarkers = List.from(markers); 
     });
   }
 
@@ -532,7 +529,6 @@ Widget buildSuggestions(BuildContext context) {
         marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase())
     ).toList();
 
-
   return ListView.builder(
     itemCount: suggestionList.length,
     itemBuilder: (context, index) {
@@ -547,7 +543,6 @@ Widget buildSuggestions(BuildContext context) {
     },
   );
 }
-
 }
 
 class ReviewDialog extends StatefulWidget {
@@ -566,8 +561,8 @@ class _ReviewDialogState extends State<ReviewDialog> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       print('Review: $_review');
-      Navigator.of(context).pop();
     }
+   
   }
 
   @override
@@ -605,6 +600,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                 SizedBox(height: 16.0),
                 Center(
                   child: ReviewSlider(
+                    
                     // Replace with your desired initial value
                     initialValue: 2,
                     // Replace with your list of review options
@@ -643,7 +639,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
             child: Text('إلغاء', style: TextStyle(color: Colors.indigo[900])),
           ),
           ElevatedButton(
-            onPressed: _submitReview,
+            onPressed: () => Navigator.of(context).pop(),
             child: Text('إرسال', style: TextStyle(color: Colors.indigo[900])),
           ),
         ],

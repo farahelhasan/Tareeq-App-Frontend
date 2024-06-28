@@ -886,6 +886,8 @@ child: SizedBox(width: 80, height: 1),
 );
 }
 }
+
+
 class Globals {
   static int userId = 0;
   static String userEmail = ''; 

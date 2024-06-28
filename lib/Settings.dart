@@ -19,6 +19,8 @@ class SettingsWeb extends StatefulWidget {
 }
 
 class _SettingsWebState extends State<SettingsWeb> {
+  
+  
   @override
   void initState() {
     super.initState();
@@ -26,22 +28,29 @@ class _SettingsWebState extends State<SettingsWeb> {
   }
 
   Future<void> _initializeUser() async {
-    try {
-      print("Initializing user...");
-      print(profile.user_id);
-      Map<String, dynamic> userData = await ApiService.getUserController(profile.user_id);
-      print(userData);
-      setState(() {
-        profile.userEmail = userData['email'];
-        profile.name = userData['name'];
-        profile.username = userData['username'];
-        profile.password = userData['password'];
-        profile.profile_picture_url = userData['profile_picture_url'];
-      });
-    } catch (e) {
-      print("Error initializing user: $e");
-    }
+  try {
+  print("Initializing user...");
+  print(profile.user_id);
+  Map<String, dynamic> userNameData = await ApiService.getUserController(profile.user_id);
+  print(userNameData);
+  if (userNameData['data'] != null) {
+  if (userNameData['data'] is Map<String, dynamic>) {
+  var userData = userNameData['data'];
+  profile.userEmail = userData['email'];
+  profile.name = userData['name'];
+  profile.username = userData['username'];
+  profile.password = userData['password'];
+  profile.profile_picture_url =userData['profile_picture_url'];
+    } else {
+  print("Data is not a Map");
   }
+  }
+  } catch (e) {
+  print("Error: $e");
+  }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +106,7 @@ class _SettingsWebState extends State<SettingsWeb> {
             children: [
               BigUserCard(
                 backgroundColor: Color.fromARGB(79, 114, 100, 226),
-                userName: profileinfo.username ,
+                userName: profileinfo.name ,
                 userProfilePic: NetworkImage(profile.profile_picture_url),
                 cardActionWidget: SettingsItem(
                   icons: Icons.edit,
