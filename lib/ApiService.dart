@@ -334,7 +334,7 @@ static Future<Map<String, dynamic>> allCommentController(int checkpointId) async
 }
 
 // add new comment to specific checkpoint by checkpoint id pass in url.
-static Future<Map<String, dynamic>> addCommentController(int checkpointId, String commentDescription, String imageUrl, int userId) async {
+static Future<Map<String, dynamic>> addCommentController(int checkpointId, String commentDescription, String imageUrl, int userId, String timestamp) async {
   try {
     final response = await http.post(
       Uri.parse('$apiUrl/comment/add/toCheckpoint/$checkpointId'),
@@ -342,6 +342,7 @@ static Future<Map<String, dynamic>> addCommentController(int checkpointId, Strin
         'comment_description': commentDescription,
         'image_url': imageUrl,
         'user_id': userId,
+        'timestamp':timestamp,
       }),
       headers: {'Content-Type': 'application/json'},
     );
@@ -734,6 +735,26 @@ static Future<Map<String, dynamic>> sendNotification(final token, String name, S
     }
 }
 
+// send favorite notification.
+static Future<Map<String, dynamic>> sendFavoriteNotification(final token, String name, String replay_description, String checkpoint_name) async {
+    final response = await http.post(
+    Uri.parse('$apiUrl/notification/sendFavorite'),
+     body: json.encode({
+    'token': token,
+    'name' : name,
+    'replay_description': replay_description,
+    'checkpoint_name': checkpoint_name
+    }), 
+    headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 201) {
+      print("notification favorite: ${response.body}");
+    return json.decode(response.body); //  successful.
+    } else {
+    throw Exception('Failed to set data'); //  failed.
+    }
+}
+
 // save the token in database.
 static Future<Map<String, dynamic>> saveToken(int user_id, final token) async {
     final response = await http.post(
@@ -785,6 +806,23 @@ static Future<String> getToken(int userId) async {
     else{
       throw Exception('Failed to load data'); // get user failed.
    }
+}
+// get all user with specific favorite checkpoint.
+static Future<List<int>> getUserIds(int checkpointId) async {
+    final response = await http.get(
+        Uri.parse('$apiUrl/checkpoint/favorite/users/$checkpointId'), 
+        headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        print(responseBody);
+        List<int> userIds = List<int>.from(responseBody['data']);
+        print(userIds);
+        return userIds;
+    } else {
+        throw Exception('Failed to load data');
+    }
 }
 
 

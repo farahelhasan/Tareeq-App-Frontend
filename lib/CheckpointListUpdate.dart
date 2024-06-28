@@ -15,7 +15,11 @@ class CheckpointDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+             backgroundColor: Colors.orange.shade50,
+
       appBar: AppBar(
+                     backgroundColor: Colors.orange.shade50,
+
         title: Padding(
           padding: const EdgeInsets.only(top: 10),
           child: Align(
@@ -119,6 +123,8 @@ class _CheckpointDetailsBodyState extends State<CheckpointDetailsBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+                   backgroundColor: Colors.orange.shade50,
+
       key: _scaffoldKey,
       body: ListView(
         children: [

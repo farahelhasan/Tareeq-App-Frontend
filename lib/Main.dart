@@ -43,7 +43,7 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
+  // FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
 
   runApp(MyApp());
 }

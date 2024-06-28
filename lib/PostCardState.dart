@@ -60,7 +60,7 @@ class _PostCardState extends State<PostCard> {
     });
   }
   
-void _deleteQuestion() {
+  void _deleteQuestion() {
   print('Question ID: ${widget.questionId}');
   showDialog(
     context: context,
@@ -97,8 +97,7 @@ void _deleteQuestion() {
     },
   );
 }
-
-
+  
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -164,8 +163,6 @@ void _deleteQuestion() {
   );
 }
 
-
-
   void _editReplay(Comment comment) {
   String updatedComment = comment.comment;
   showDialog(
@@ -209,7 +206,7 @@ void _deleteQuestion() {
   );
 }
 
-Future<void> _editComment(int replay_id, String updatedComment) async {
+  Future<void> _editComment(int replay_id, String updatedComment) async {
   try {
     await ApiService.editReplayController(replay_id, updatedComment);
       setState(() {
@@ -396,7 +393,7 @@ Future<void> _editComment(int replay_id, String updatedComment) async {
                                   children: [
                                     SizedBox(height: 4),
                                     Text(
-                                      '${isArabic(comment.comment) ? 'التعليق: ${comment.comment}' : ' ${comment.comment} :التعليق'}',
+                                      '${isArabic(comment.comment) ? '  ${comment.comment}' : ' ${comment.comment} '}',
                                       textAlign: TextAlign.right,
                                       style: TextStyle(color: const Color.fromARGB(255, 1, 7, 42) , fontSize: 18),
                                     ),

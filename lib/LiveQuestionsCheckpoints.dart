@@ -179,6 +179,7 @@ class _LiveQuestionsCheckpointsState extends State<LiveQuestionsCheckpoints> {
                     hintText: 'اسأل عن حالة الحاجز',
                     hintStyle: TextStyle(fontSize: 16, color: Colors.indigo[900]),
                     contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    
                   ),
                 ),
               ],

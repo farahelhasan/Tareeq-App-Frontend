@@ -42,7 +42,7 @@ class _PostCardState extends State<PostCard> {
   void _addReplays() {
     print(profile.user_id);
     print(Pathinfo.user_id);
-    setState(() {
+    setState(() async {
       String newComment = replaycontroller.text;
       if (newComment.isNotEmpty) {
         widget.comments.add(
@@ -55,6 +55,15 @@ class _PostCardState extends State<PostCard> {
           ),
         );
         ApiService.addPathReplayController(widget.pathId, newComment, profile.user_id);
+        //send notification
+        //first: get the userId (who make the question) from path id.
+        int userId = await ApiService.getuserId(widget.pathId);
+        print("faraaaaaaaaaaaaaah $userId");
+        //second: get the token for user who make the question.
+        String token = await ApiService.getToken(userId);
+                print("faraaaaaaaaaaaaaah $token");
+        //send notification.
+        await ApiService.sendNotification(token,  profile.name, newComment);
         Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
         _replayCounter++;
         replaycontroller.clear();
@@ -319,7 +328,7 @@ Future<void> _editComment(int replay_id, String updatedComment) async {
                     children: [
                       SizedBox(height: 4),
                       Text(
-                        '${isArabic(comment.comment) ? 'التعليق: ${comment.comment}' : ' ${comment.comment} :التعليق'}',
+                        '${isArabic(comment.comment) ? ' ${comment.comment}' : ' ${comment.comment} '}',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: const Color.fromARGB(255, 1, 7, 42) , fontSize: 18),
                       ),
@@ -362,6 +371,7 @@ Future<void> _editComment(int replay_id, String updatedComment) async {
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: _addReplays,
+                    
                     child: Text('إضافة'),
                     
                   ),

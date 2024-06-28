@@ -32,12 +32,15 @@ class _LiveQuestionsState extends State<LiveQuestions> {
     
     try {
       Map<String, dynamic>? allPathData = await ApiService.allPathController();
+      print("hhhhhhhhhhhhhhhhh$allPathData");
       if (allPathData['data'] != null) {
+        print("hhhhhhhhhhhhhhhh");
         List<PostCard> allPathDataList = [];
         for (var allPathDataItem in allPathData['data']) {
           List<Comment> comments = [];
           Map<String, dynamic> pathReplayListData = await ApiService.pathReplayListController(allPathDataItem['path_id']);
           if (pathReplayListData['data'] != null) {
+            
             for (var reply in pathReplayListData['data']) {
               String name = await _getUserName(reply['user_id']);
               //bool isCurrentUser = Profile.user_id == postCard.user_id;

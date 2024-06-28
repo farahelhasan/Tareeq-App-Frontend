@@ -1042,66 +1042,62 @@ Future<void> _showMyDialog(String title, String message) async {
   ),
   ],
   ),
-
-
-  appBar:AppBar(
-  backgroundColor: Colors.orange.shade50,
-  title: Padding(
-  padding: const EdgeInsets.only(top: 10),
-  child: Align(
-  child: Container(
-  child: Row(
-  mainAxisAlignment: MainAxisAlignment.end,
-  children: [
-  Text(
-  "طريق",
-  textAlign: TextAlign.center,
-  style: TextStyle(
-  color: Colors.indigo[900],
-  fontWeight: FontWeight.bold,
-  fontSize: 35,
-  ),
-  ),
-  SizedBox(width: 5),
-  Align(
-  alignment: Alignment.centerRight,
-  child: Icon(
-  Icons.location_on_rounded,
-  size: 35,
-  color: Colors.indigo[900],
-  ),
-  ),
-  SizedBox(width: 10),
-  ],
-  ),
-  ),
-  ),
-  ),
-
-actions: 
-   [     
-    Padding(
-      padding: EdgeInsets.all(5),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: IconButton(
-          icon: Icon(Icons.menu, size: 45, color: Colors.indigo[900]),
-          onPressed: () => _scaffoldKey.currentState!.openEndDrawer(),
+  appBar: AppBar(
+        backgroundColor: Colors.orange.shade50,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Align(
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "طريق",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.indigo[900],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.location_on_rounded,
+                      size: 35,
+                      color: Colors.indigo[900],
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                ],
+              ),
+            ),
+          ),
         ),
-      ),
-    ),
-         IconButton(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10, top: 10),
+          child: IconButton(
+            icon: Icon(Icons.menu, size: 40, color: Colors.indigo[900]),
+            onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search , size: 40, color: Colors.indigo[900]),
             onPressed: () {
               showSearch(
-                context: context!,
-                delegate: MarkerSearchDelegate(filteredMarkers, filterMarkers),
+                context: context,
+                delegate: MarkerSearchDelegate(markers, filterMarkers),
               );
             },
-            icon: Icon(Icons.search , size: 45, color: Colors.indigo[900]),
           ),
         ],
-  ),
-  endDrawer: Drawer(
+      ),
+
+
+
+  drawer: Drawer(
   backgroundColor: Colors.indigo[900],
   child: Container(
   padding: EdgeInsets.all(20),
@@ -1113,9 +1109,9 @@ actions:
   height: 60,
   width: 60,
   child: CircleAvatar(
-                      radius: 80.0,
-                      backgroundImage: NetworkImage(profile.profile_picture_url),
-                    ),
+  radius: 80.0,
+  backgroundImage:  AssetImage(Globals.profile_picture_url),
+),
   ),
   SizedBox(width: 10),
   Column(
@@ -1342,34 +1338,34 @@ class MarkerSearchDelegate extends SearchDelegate<String> {
     // Implement if needed
     return Container();
   }
-
 @override
 Widget buildSuggestions(BuildContext context) {
- List<Marker> suggestionList = query.isEmpty
-    ? markers
-    : markers.where((marker) =>
-        marker.infoWindow != null &&
-        marker.infoWindow.title != null &&
-        marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase())
-    ).toList();
-
+  List<Marker> suggestionList = query.isEmpty
+      ? markers
+      : markers.where((marker) =>
+          marker.infoWindow != null &&
+          marker.infoWindow.title != null &&
+          marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase())).toList();
 
   return ListView.builder(
     itemCount: suggestionList.length,
     itemBuilder: (context, index) {
       Marker marker = suggestionList[index];
       return ListTile(
-        title: Text(marker.infoWindow!.title!),
+        title: Text(marker.infoWindow?.title ?? ""),
         onTap: () {
-          filterCallback(marker.infoWindow!.title!); // Apply filter
-          close(context, marker.infoWindow!.title!); // Close search and pass result
-        },
+         String title = "حاجز عورتا";
+          filterCallback(title);
+          close(context, title);
+        },  
       );
     },
   );
 }
-
 }
+
+
+
 
 class ReviewDialog extends StatefulWidget {
   @override

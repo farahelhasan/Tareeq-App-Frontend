@@ -112,6 +112,7 @@ flutter:
      - images/locationDesignIcon.png
      - images/removeIcon.png
      - images/favorite.png
+     - images/moath.jpg
      - assets/credentials.json
 
 

@@ -113,13 +113,16 @@ class CheckpointDetailsBody extends StatelessWidget {
             ),
           ),
         ),
-        _buildAttributeRow(checkpointinfo.name, '  :الاسم'),
-        _buildAttributeRow(checkpointinfo.status_in, '  :الداخل'),
-        _buildAttributeRow(checkpointinfo.average_time_in.toString(), ' : الوقت المتوقع للانتظار'),
-        _buildAttributeRow(checkpointinfo.status_out, ' :الخارج'),
-        _buildAttributeRow(checkpointinfo.average_time_out.toString(), ' : الوقت المتوقع للانتظار'),
-        _buildAttributeRow(checkpointinfo.updatedAt, " "),
-        _buildSmallerAttributeRow("", "اضافة الى المفضلة")
+        _buildAttributeRow(checkpointinfo.name, ' :اسم الحاجز'),
+        _buildAttributeRow(checkpointinfo.status_in, '  : (باتجاه مدينة نابلس) الداخل'),
+        _buildAttributeRow(checkpointinfo.average_time_in.toString(), ' : الوقت المتوقع للانتظار بالدقائق'),
+        _buildAttributeRow(checkpointinfo.status_out, ' : (خارج من مدينة نابلس) الخارج'),
+        _buildAttributeRow(checkpointinfo.average_time_out.toString(), ' : الوقت المتوقع للانتظار بالدقائق'),
+        _buildAttributeRow(checkpointinfo.updatedAt, " "), 
+        // _buildAttributeRow("  24/6/2024 at 6:35:10 PM ", " : اخر تحديث"),
+       // _buildAttributeRow("  24/6/2024 at 6:35:10 PM ", " : اخر تحديث"),
+  
+        _buildSmallerAttributeRow("", "  إضافة الى المفضلة")
       ],
     );
   }
@@ -219,23 +222,32 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(5.0),
-        color: Color.fromARGB(255, 241, 242, 246),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              widget.label,
-              style: TextStyle(
-                color: Colors.indigo[900],
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+  return Center(
+    child: Container( 
+       decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0), // Adjust the radius as needed
+      color: Color.fromARGB(255, 241, 242, 246),        
+          ), 
+      padding: EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            widget.label,
+            style: TextStyle(
+              color: Colors.indigo[900],
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(width: 8),
-            IconButton(
+          
+          ),
+          SizedBox(width: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+              color: Colors.white, // Background color if needed
+            ),
+            child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 color: isFavorite ? Colors.red : Colors.grey,
@@ -260,11 +272,12 @@ class __SmallerAttributeRowState extends State<_SmallerAttributeRow> {
                 }
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class question {

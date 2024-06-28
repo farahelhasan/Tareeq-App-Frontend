@@ -29,7 +29,7 @@ import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
     }else{
   Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) => MyMapAppUser()), //MyApp
+  MaterialPageRoute(builder: (context) => MyApp()), //MyApp
   );
 
     }

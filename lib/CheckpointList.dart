@@ -8,7 +8,7 @@ import 'package:hello_world/LogIn.dart';
 import 'package:hello_world/MapPage.dart';
 import 'package:hello_world/Profile.dart';
 import 'package:hello_world/AddCheckpoint.dart';
-import 'package:hello_world/Settings.dart';
+import 'package:hello_world/SettingAdmin.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> data = [];
   List<Map<String, dynamic>> filteredData = [];
   String filterQuery = ''; 
-  int selectedindex = 1;
+  int selectedindex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -55,14 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
   });
   switch (val) {
   case 0:
-  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
-  selectedindex = 1;
+  Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+  selectedindex = 0;
   break;
   case 1:
-  Navigator.push(context, MaterialPageRoute(builder: (context) => MyMapApp()));
-  selectedindex = 1;
-  break;
-  case 2:
   profileinfo.name = Globals.name;
   profileinfo.userEmail = Globals.userEmail;
   profileinfo.username = Globals.username;
@@ -78,10 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
   unselectedItemColor: Colors.indigo[900],
   selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
   items: [
-  BottomNavigationBarItem(
-  icon: Icon(Icons.question_answer),
-  label: "الاسئلة المباشرة",
-  ),
   BottomNavigationBarItem(
   icon: Icon(Icons.home),
   label: "الصفحة الاساسية",
@@ -178,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Text("الصفحة الرئيسية", style: TextStyle(color: Colors.white)),
                 leading: Icon(Icons.home, color: Colors.white),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MapApp()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                 },
               ),
               ListTile(
@@ -188,34 +180,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
                 },
               ),
+              // ListTile(
+              //   title: Text("اسأل عن الطريق التي تريد", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.question_answer, color: Colors.white),
+              //   onTap: () {
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
+              //   },
+              // ),
               ListTile(
-                title: Text("اسأل عن الطريق التي تريد", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.question_answer, color: Colors.white),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveQuestions()));
-                },
-              ),
-              ListTile(
-                title: Text("تقييم", style: TextStyle(color: Colors.white)),
+                title: Text("متابعة تقييمات طريق!", style: TextStyle(color: Colors.white)),
                 leading: Icon(Icons.feedback, color: Colors.white),
                 onTap: () {
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => InAppReviewExampleApp()));
                 },
               ),
-              ListTile(
-                title: Text("اضافة حاجز طيار", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.add, color: Colors.white),
-                onTap: () {
-                  _showAddBarrierDialog(context);
-                },
-              ),
-              ListTile(
-                title: Text("ازالة حاجز طيار", style: TextStyle(color: Colors.white)),
-                leading: Icon(Icons.remove, color: Colors.white),
-                onTap: () {
-                  _showRemoveBarrierDialog(context);
-                },
-              ),
+              // ListTile(
+              //   title: Text("اضافة حاجز طيار", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.add, color: Colors.white),
+              //   onTap: () {
+              //     _showAddBarrierDialog(context);
+              //   },
+              // ),
+              // ListTile(
+              //   title: Text("ازالة حاجز طيار", style: TextStyle(color: Colors.white)),
+              //   leading: Icon(Icons.remove, color: Colors.white),
+              //   onTap: () {
+              //     _showRemoveBarrierDialog(context);
+              //   },
+              // ),
               ListTile(
                 title: Text("حول تطبيق طريق", style: TextStyle(color: Colors.white)),
                 leading: Icon(Icons.help, color: Colors.white),
@@ -351,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
-          if (filteredData[index]['complete_flag'] == 0 || filteredData[index]['complete_flag'] == null)
+          if (filteredData[index]['complete_flag'] == false || filteredData[index]['complete_flag'] == null)
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -382,7 +374,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   },
-                    
+       
                   ),
 
                   MapApp(),
@@ -713,7 +705,10 @@ class BarrierDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
+                     backgroundColor: Colors.orange.shade50,
+
         title: Text("استكمال معلومات الحاجز"),
       ),
       
@@ -928,7 +923,15 @@ class BarrierDetailsPage extends StatelessWidget {
 
                      }
                   },
-                  child: Text('اضافة'),
+                  child: Text('اضافة',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),),
+                style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo[900],
+              ),
+                  
                 ),
               ],
             ),
